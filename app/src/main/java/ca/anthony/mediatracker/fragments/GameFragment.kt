@@ -1,34 +1,29 @@
 package ca.anthony.mediatracker.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
+import ca.anthony.mediatracker.adapters.GameAdapter
+import ca.anthony.mediatracker.models.Game
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [GameFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class GameFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    val db = Firebase.firestore
+
+    private var gameList: ArrayList<Game> = arrayListOf()
+    private lateinit var gameRecycler: RecyclerView
+    private var gameAdapter = GameAdapter(gameList)
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +33,27 @@ class GameFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_game, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GameFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GameFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        gameRecycler = view.findViewById(R.id.GameRecycler)
+        gameRecycler.layoutManager = LinearLayoutManager(context)
+        gameRecycler.adapter = gameAdapter
+
+        loadGames()
+    }
+
+    private fun loadGames(){
+        val data = db.collection("games").orderBy("complete").get()
+
+        data.addOnSuccessListener {docs ->
+            for (doc in docs){
+                val game = doc.toObject(Game::class.java)
+                gameList.add(game)
             }
+            gameAdapter.notifyDataSetChanged()
+        }.addOnFailureListener { exception->
+            Log.e("Firestore error", exception.message.toString())
+        }
     }
 }

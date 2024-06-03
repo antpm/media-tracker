@@ -42,9 +42,8 @@ class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<G
         holder.gameRating.text = context?.getString(R.string.recycler_game_rating_number, game.rating)
 
         //convert date from long and format into string
-        val date = Date(game.complete!!)
-        val format = SimpleDateFormat("dd.MM.yyyy", Locale.US)
-        holder.gameDate.text = format.format(date)
+        val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
+        holder.gameDate.text = format.format(game.complete!!)
 
         //set button listener
         holder.gameButton.setOnClickListener{
