@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1077125312937",
+    "project_id": "media-tracker-61d78",
+    "storage_bucket": "media-tracker-61d78.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077125312937:android:c251bd2111a3057da714b8",
+        "android_client_info": {
+          "package_name": "ca.anthony.mediatracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5cp7sV8dkHzxigKgwetqVw3VhFbeLBAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

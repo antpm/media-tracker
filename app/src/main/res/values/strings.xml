@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">MediaTracker</string>
+
+    <!-- Screen names -->
+    <string name="home">Home</string>
+    <string name="games">Games</string>
+
+    <!-- Home Screen Labels -->
+    <string name="home_latest">Your Latest</string>
+
+
+    <!-- Game Screen Labels -->
+    <string name="recycler_game_title">Title</string>
+    <string name="recycler_game_date">Completion Date:</string>
+    <string name="recycler_game_rating">Rating:</string>
+    <string name="recycler_game_rating_number">%1$d/5</string>
+    <string name="recycler_game_platform">Platform:</string>
+    <string name="recycler_game_button">View Game</string>
+
+
+    <string name="placeholder">placeholder</string>
+</resources>
