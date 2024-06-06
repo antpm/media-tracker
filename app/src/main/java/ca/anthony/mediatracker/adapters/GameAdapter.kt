@@ -1,19 +1,17 @@
 package ca.anthony.mediatracker.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
-import ca.anthony.mediatracker.activities.GameDetailActivity
+import ca.anthony.mediatracker.fragments.GameDetailsFragment
 import ca.anthony.mediatracker.models.Game
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<GameAdapter.ViewHolder>() {
@@ -47,9 +45,17 @@ class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<G
 
         //set button listener
         holder.gameButton.setOnClickListener{
-            val intent = Intent(context, GameDetailActivity::class.java)
-            intent.putExtra("game", game)
-            startActivity(context!!, intent, null)
+            //val intent = Intent(context, GameDetailActivity::class.java)
+            val detailFragment = GameDetailsFragment()
+            detailFragment.setGame(game)
+            val activity: AppCompatActivity = context as AppCompatActivity
+            val transaction = activity.supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.NavHost, detailFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+            //intent.putExtra("game", game)
+            //startActivity(context!!, intent, null)
         }
     }
 

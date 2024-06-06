@@ -44,6 +44,7 @@ class GameFragment : Fragment() {
     }
 
     private fun loadGames(){
+        gameList.clear()
         val data = db.collection("games").orderBy("complete").get()
 
         data.addOnSuccessListener {docs ->
