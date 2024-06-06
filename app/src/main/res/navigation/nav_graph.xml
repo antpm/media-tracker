@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/game_fragment"
-        android:name="ca.anthony.mediatracker.fragments.GameFragment"
+        android:name="ca.anthony.mediatracker.fragments.GamesFragment"
         android:label="@string/games"
-        tools:layout="@layout/fragment_game" />
+        tools:layout="@layout/fragment_games" />
 </navigation>

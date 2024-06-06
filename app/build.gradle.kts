@@ -52,6 +52,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
 
+    //glide, for loading images from firebase storage
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
 
     //firebase

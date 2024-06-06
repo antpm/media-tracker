@@ -13,10 +13,9 @@ import ca.anthony.mediatracker.adapters.GameAdapter
 import ca.anthony.mediatracker.models.Game
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
 
 
-class GameFragment : Fragment() {
+class GamesFragment : Fragment() {
 
     val db = Firebase.firestore
 
@@ -30,7 +29,7 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game, container, false)
+        return inflater.inflate(R.layout.fragment_games, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
