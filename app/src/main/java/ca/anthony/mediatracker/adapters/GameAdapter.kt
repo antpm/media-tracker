@@ -37,7 +37,7 @@ class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<G
         holder.gamePlatform.text = game.platform
 
         //set rating field to the rating number string and insert rating number from game
-        holder.gameRating.text = context?.getString(R.string.recycler_game_rating_number, game.rating)
+        holder.gameRating.text = context?.getString(R.string.game_rating_number, game.rating)
 
         //convert date from long and format into string
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)

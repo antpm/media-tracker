@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toDrawable
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.models.Game
 import com.bumptech.glide.Glide
@@ -26,6 +27,9 @@ class GameDetailsFragment : Fragment() {
     //details
     private lateinit var image: ImageView
     private lateinit var title: TextView
+    private lateinit var rating: ImageView
+    private lateinit var developer: TextView
+    private lateinit var publisher: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +56,10 @@ class GameDetailsFragment : Fragment() {
         }
         image = requireActivity().findViewById(R.id.GameDetailImage)
         title = requireActivity().findViewById(R.id.GameDetailTitle)
+        rating = requireActivity().findViewById(R.id.GameDetailRating)
+        developer = requireActivity().findViewById(R.id.GameDetailDeveloper)
+        publisher = requireActivity().findViewById(R.id.GameDetailPublisher)
+
         setDetails()
     }
 
@@ -66,8 +74,32 @@ class GameDetailsFragment : Fragment() {
         imageRef.downloadUrl.addOnSuccessListener{
             Glide.with(requireActivity()).load(it).into(image)
         }
-        //set the rest of the details
+
+        //set rating image
+        when (game.rating) {
+            1-> rating.setImageResource(R.drawable.star1)
+            2-> rating.setImageResource(R.drawable.star2)
+            3-> rating.setImageResource(R.drawable.star3)
+            4-> rating.setImageResource(R.drawable.star4)
+            5-> rating.setImageResource(R.drawable.star5)
+        }
+
+        //set title
         title.text = game.title
+
+        //set release date
+
+        //set complete date
+
+        //set dev
+        developer.text = requireActivity().getString(R.string.game_developer, game.developer)
+
+        //set pub
+        publisher.text =requireActivity().getString(R.string.game_publisher, game.publisher)
+
+        //set platform
+
+        //set genre
     }
 
 }

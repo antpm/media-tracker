@@ -9,16 +9,22 @@
     <string name="home_latest">Your Latest</string>
 
 
-    <!-- Game Screen Labels -->
-    <string name="recycler_game_title">Title</string>
-    <string name="recycler_game_date">Completion Date:</string>
-    <string name="recycler_game_rating">Rating:</string>
-    <string name="recycler_game_rating_number">%1$d/5</string>
-    <string name="recycler_game_platform">Platform:</string>
-    <string name="recycler_game_button">View Game</string>
+    <!-- Game & Game Detail Screen Labels -->
+    <string name="game_title">Title</string>
+    <string name="game_complete_date">Completion Date:</string>
+    <string name="game_rating">Rating:</string>
+    <string name="game_rating_number">%1$d/5</string>
+    <string name="game_platform">Platform:</string>
+    <string name="game_button">View Game</string>
+    <string name="game_genre">Genre: %1$s</string>
+    <string name="game_publisher">Publisher: %1$s</string>
+    <string name="game_developer">Developer: %1$s</string>
+    <string name="game_release_date">Release Date: %1$s</string>
+
+    <!-- Detail Screen Labels -->
+
 
 
     <string name="placeholder">placeholder</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
