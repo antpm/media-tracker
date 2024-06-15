@@ -11,15 +11,15 @@
 
     <!-- Game & Game Detail Screen Labels -->
     <string name="game_title">Title</string>
-    <string name="game_complete_date">Completion Date:</string>
-    <string name="game_rating">Rating:</string>
-    <string name="game_rating_number">%1$d/5</string>
-    <string name="game_platform">Platform:</string>
-    <string name="game_button">View Game</string>
+    <string name="game_complete_date">Completion Date: %1$s</string>
+    <string name="game_rating">Rating: %1$d/5</string>
+    <string name="game_platform">Platform: %1$s</string>
+    <string name="game_details_button">View Game</string>
     <string name="game_genre">Genre: %1$s</string>
     <string name="game_publisher">Publisher: %1$s</string>
     <string name="game_developer">Developer: %1$s</string>
     <string name="game_release_date">Release Date: %1$s</string>
+    <string name="game_edit_button">Edit Game Details</string>
 
     <!-- Detail Screen Labels -->
 

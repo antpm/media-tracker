@@ -34,14 +34,14 @@ class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<G
 
         //set simple text to fields
         holder.gameTitle.text = game.title
-        holder.gamePlatform.text = game.platform
+        holder.gamePlatform.text = context?.getString(R.string.game_platform, game.platform)
 
         //set rating field to the rating number string and insert rating number from game
-        holder.gameRating.text = context?.getString(R.string.game_rating_number, game.rating)
+        holder.gameRating.text = context?.getString(R.string.game_rating, game.rating)
 
         //convert date from long and format into string
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-        holder.gameDate.text = format.format(game.complete!!)
+        holder.gameDate.text = context?.getString(R.string.game_complete_date, format.format(game.complete!!))
 
         //set button listener
         holder.gameButton.setOnClickListener{

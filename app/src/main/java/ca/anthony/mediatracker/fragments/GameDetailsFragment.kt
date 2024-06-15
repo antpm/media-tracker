@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.graphics.drawable.toDrawable
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.models.Game
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class GameDetailsFragment : Fragment() {
 
@@ -30,6 +31,10 @@ class GameDetailsFragment : Fragment() {
     private lateinit var rating: ImageView
     private lateinit var developer: TextView
     private lateinit var publisher: TextView
+    private lateinit var genre: TextView
+    private lateinit var platform: TextView
+    private lateinit var completeDate: TextView
+    private lateinit var releaseDate: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +53,7 @@ class GameDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        closeButton = requireActivity().findViewById(R.id.GameDetailsCloseButton)
+        closeButton = requireActivity().findViewById(R.id.GameDetailCloseButton)
         closeButton.setOnClickListener {
             //closes the fragment and re-enables the navbar
             requireActivity().supportFragmentManager.popBackStack()
@@ -59,6 +64,10 @@ class GameDetailsFragment : Fragment() {
         rating = requireActivity().findViewById(R.id.GameDetailRating)
         developer = requireActivity().findViewById(R.id.GameDetailDeveloper)
         publisher = requireActivity().findViewById(R.id.GameDetailPublisher)
+        genre = requireActivity().findViewById(R.id.GameDetailGenre)
+        platform = requireActivity().findViewById(R.id.GameDetailPlatform)
+        completeDate = requireActivity().findViewById(R.id.GameDetailCompleteDate)
+        releaseDate = requireActivity().findViewById(R.id.GameDetailReleaseDate)
 
         setDetails()
     }
@@ -87,9 +96,11 @@ class GameDetailsFragment : Fragment() {
         //set title
         title.text = game.title
 
-        //set release date
+        //set release date and complete date
+        val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
-        //set complete date
+        releaseDate.text = requireActivity().getString(R.string.game_release_date, format.format(game.release!!))
+        completeDate.text = requireActivity().getString(R.string.game_complete_date, format.format(game.complete!!))
 
         //set dev
         developer.text = requireActivity().getString(R.string.game_developer, game.developer)
@@ -98,8 +109,10 @@ class GameDetailsFragment : Fragment() {
         publisher.text =requireActivity().getString(R.string.game_publisher, game.publisher)
 
         //set platform
+        platform.text = requireActivity().getString(R.string.game_platform, game.platform)
 
         //set genre
+        genre.text = requireActivity().getString(R.string.game_genre, game.genre)
     }
 
 }
