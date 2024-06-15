@@ -118,7 +118,7 @@
                 android:text="@string/game_release_date"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/GameDetailCompleteDate" />
+                app:layout_constraintTop_toBottomOf="@+id/GameDetailPlatform" />
 
             <TextView
                 android:id="@+id/GameDetailCompleteDate"
@@ -129,7 +129,7 @@
                 android:text="@string/game_complete_date"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/GameDetailPlatform" />
+                app:layout_constraintTop_toBottomOf="@+id/GameDetailReleaseDate" />
 
             <Button
                 android:id="@+id/GameDetailEditButton"
@@ -139,7 +139,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/GameDetailReleaseDate" />
+                app:layout_constraintTop_toBottomOf="@+id/GameDetailCompleteDate" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
+import androidx.navigation.Navigator
+import androidx.navigation.findNavController
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.models.Game
 import com.bumptech.glide.Glide
@@ -40,7 +43,7 @@ class GameDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         //disable the navbar when the fragment loads
         navBar = requireActivity().findViewById(R.id.BottomNav)
-        navBar.visibility = View.GONE
+        //navBar.visibility = View.GONE
     }
 
     override fun onCreateView(
@@ -53,28 +56,24 @@ class GameDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        game = arguments?.getSerializable("game") as Game
         closeButton = requireActivity().findViewById(R.id.GameDetailCloseButton)
         closeButton.setOnClickListener {
             //closes the fragment and re-enables the navbar
-            requireActivity().supportFragmentManager.popBackStack()
-            navBar.visibility = View.VISIBLE
+            //requireActivity().findNavController(view).popBackStack()
+            Navigation.findNavController(view).popBackStack()
         }
-        image = requireActivity().findViewById(R.id.GameDetailImage)
-        title = requireActivity().findViewById(R.id.GameDetailTitle)
-        rating = requireActivity().findViewById(R.id.GameDetailRating)
-        developer = requireActivity().findViewById(R.id.GameDetailDeveloper)
-        publisher = requireActivity().findViewById(R.id.GameDetailPublisher)
-        genre = requireActivity().findViewById(R.id.GameDetailGenre)
-        platform = requireActivity().findViewById(R.id.GameDetailPlatform)
-        completeDate = requireActivity().findViewById(R.id.GameDetailCompleteDate)
-        releaseDate = requireActivity().findViewById(R.id.GameDetailReleaseDate)
+        image = view.findViewById(R.id.GameDetailImage)
+        title = view.findViewById(R.id.GameDetailTitle)
+        rating = view.findViewById(R.id.GameDetailRating)
+        developer = view.findViewById(R.id.GameDetailDeveloper)
+        publisher = view.findViewById(R.id.GameDetailPublisher)
+        genre = view.findViewById(R.id.GameDetailGenre)
+        platform = view.findViewById(R.id.GameDetailPlatform)
+        completeDate = view.findViewById(R.id.GameDetailCompleteDate)
+        releaseDate = view.findViewById(R.id.GameDetailReleaseDate)
 
         setDetails()
-    }
-
-    fun setGame(newGame: Game){
-        //sets the game that is being viewed, called from the game recyclerview's adapter
-        game = newGame
     }
 
     private fun setDetails(){

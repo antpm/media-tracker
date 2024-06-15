@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.adapters.GameAdapter
 import ca.anthony.mediatracker.models.Game
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
@@ -22,6 +24,7 @@ class GamesFragment : Fragment() {
     private var gameList: ArrayList<Game> = arrayListOf()
     private lateinit var gameRecycler: RecyclerView
     private var gameAdapter = GameAdapter(gameList)
+    private lateinit var addButton: FloatingActionButton
 
 
     override fun onCreateView(
@@ -38,6 +41,15 @@ class GamesFragment : Fragment() {
         gameRecycler = view.findViewById(R.id.GameRecycler)
         gameRecycler.layoutManager = LinearLayoutManager(context)
         gameRecycler.adapter = gameAdapter
+        addButton = view.findViewById(R.id.GameAddButton)
+
+        addButton.setOnClickListener {
+            val addFragment = GameAddFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.NavHost, addFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
         loadGames()
     }

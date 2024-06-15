@@ -18,5 +18,14 @@
         android:id="@+id/game_fragment"
         android:name="ca.anthony.mediatracker.fragments.GamesFragment"
         android:label="@string/games"
-        tools:layout="@layout/fragment_games" />
+        tools:layout="@layout/fragment_games" >
+        <action
+            android:id="@+id/action_game_fragment_to_game_detail_fragment"
+            app:destination="@id/game_detail_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/game_detail_fragment"
+        android:name="ca.anthony.mediatracker.fragments.GameDetailsFragment"
+        android:label="fragment_game_details"
+        tools:layout="@layout/fragment_game_details" />
 </navigation>
