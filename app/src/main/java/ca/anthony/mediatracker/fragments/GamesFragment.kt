@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
@@ -44,11 +45,12 @@ class GamesFragment : Fragment() {
         addButton = view.findViewById(R.id.GameAddButton)
 
         addButton.setOnClickListener {
-            val addFragment = GameAddFragment()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.NavHost, addFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            //val addFragment = GameAddFragment()
+            //val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            //transaction.replace(R.id.NavHost, addFragment)
+            //transaction.addToBackStack(null)
+            //transaction.commit()
+            Navigation.findNavController(view).navigate(R.id.action_game_fragment_to_game_add_fragment)
         }
 
         loadGames()

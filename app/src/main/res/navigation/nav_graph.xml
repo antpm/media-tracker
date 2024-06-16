@@ -22,10 +22,22 @@
         <action
             android:id="@+id/action_game_fragment_to_game_detail_fragment"
             app:destination="@id/game_detail_fragment" />
+        <action
+            android:id="@+id/action_game_fragment_to_game_add_fragment"
+            app:destination="@id/game_add_fragment" />
     </fragment>
     <fragment
         android:id="@+id/game_detail_fragment"
         android:name="ca.anthony.mediatracker.fragments.GameDetailsFragment"
         android:label="fragment_game_details"
-        tools:layout="@layout/fragment_game_details" />
+        tools:layout="@layout/fragment_game_details" >
+        <action
+            android:id="@+id/action_game_detail_fragment_to_game_add_fragment"
+            app:destination="@id/game_add_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/game_add_fragment"
+        android:name="ca.anthony.mediatracker.fragments.GameAddFragment"
+        android:label="fragment_game_add"
+        tools:layout="@layout/fragment_game_add" />
 </navigation>
