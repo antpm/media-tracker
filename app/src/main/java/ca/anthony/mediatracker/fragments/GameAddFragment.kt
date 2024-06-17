@@ -1,13 +1,25 @@
 package ca.anthony.mediatracker.fragments
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import ca.anthony.mediatracker.R
+import ca.anthony.mediatracker.models.Game
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import java.io.File
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -19,11 +31,33 @@ import java.util.Locale
 
 class GameAddFragment : Fragment() {
 
+    private val db = Firebase.firestore
+
+    //fields
+    private lateinit var title: EditText
+    private lateinit var developer: EditText
+    private lateinit var publisher: EditText
+    private lateinit var platform: EditText
+    private lateinit var genre: EditText
+    private lateinit var rating: EditText
     private lateinit var releaseDateTxt: EditText
     private lateinit var completeDateTxt: EditText
+    private lateinit var imageText: TextView
 
+    //buttons
+    private lateinit var imageButton: Button
+    private lateinit var saveButton: Button
+    private lateinit var cancelButton: Button
+
+    //values
     private var releaseDate: Long = 0
     private var completeDate:Long = 0
+
+    //launcher for selecting an image
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
+        val fileName = getFileNameFromUri(requireActivity(), it!!)
+        imageText.text = fileName
+    }
 
 
     override fun onCreateView(
@@ -36,8 +70,20 @@ class GameAddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        title = view.findViewById(R.id.GameAddTitle)
+        developer = view.findViewById(R.id.GameAddDev)
+        publisher = view.findViewById(R.id.GameAddPublisher)
+        platform = view.findViewById(R.id.GameAddPlatform)
+        genre = view.findViewById(R.id.GameAddGenre)
+        rating = view.findViewById(R.id.GameAddRating)
         releaseDateTxt = view.findViewById(R.id.GameAddReleaseDate)
         completeDateTxt = view.findViewById(R.id.GameAddCompDate)
+        imageText = view.findViewById(R.id.GameAddImageName)
+
+        imageButton = view.findViewById(R.id.GameAddImageButton)
+        saveButton = view.findViewById(R.id.GameAddSaveButton)
+        cancelButton = view.findViewById(R.id.GameAddCancelButton)
+
 
         releaseDateTxt.setOnClickListener {
             showDatePicker(releaseDateTxt)
@@ -45,6 +91,14 @@ class GameAddFragment : Fragment() {
 
         completeDateTxt.setOnClickListener {
             showDatePicker(completeDateTxt)
+        }
+
+        imageButton.setOnClickListener {
+            galleryLauncher.launch("image/*")
+        }
+
+        saveButton.setOnClickListener {
+            saveGame()
         }
     }
 
@@ -69,7 +123,25 @@ class GameAddFragment : Fragment() {
                 completeDate = myTimeZoneDate.toInstant().toEpochMilli()
                 completeDateTxt.setText(date)
             }
+        }
+    }
 
+    @SuppressLint("Range")
+    private fun getFileNameFromUri(context: Context, uri: Uri): String? {
+        val fileName: String?
+        val cursor = context.contentResolver.query(uri, null, null, null, null)
+        cursor?.moveToFirst()
+        fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+        cursor?.close()
+        return fileName
+    }
+
+    private fun saveGame(){
+        val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageText.text.toString())
+        db.collection("games").add(game).addOnSuccessListener {
+            Toast.makeText(context, "Game Added", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
         }
     }
 

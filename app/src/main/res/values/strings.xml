@@ -34,6 +34,7 @@
     <string name="game_add_genre">Genre:</string>
     <string name="game_add_save_button">Save Game</string>
     <string name="game_add_cancel_button">Cancel</string>
+    <string name="game_add_image_button">Select Image</string>
 
     <string name="placeholder">placeholder</string>
     <!-- TODO: Remove or change this placeholder text -->
