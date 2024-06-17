@@ -19,6 +19,7 @@ import ca.anthony.mediatracker.models.Game
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.storage
 import java.io.File
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -32,6 +33,7 @@ import java.util.Locale
 class GameAddFragment : Fragment() {
 
     private val db = Firebase.firestore
+    private val storage =  Firebase.storage.reference.child("images/games")
 
     //fields
     private lateinit var title: EditText
@@ -52,11 +54,13 @@ class GameAddFragment : Fragment() {
     //values
     private var releaseDate: Long = 0
     private var completeDate:Long = 0
+    private lateinit var image: Uri
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         val fileName = getFileNameFromUri(requireActivity(), it!!)
-        imageText.text = fileName
+        image = it
+        imageText.text = image.lastPathSegment
     }
 
 
@@ -137,12 +141,19 @@ class GameAddFragment : Fragment() {
     }
 
     private fun saveGame(){
-        val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageText.text.toString())
+        val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), image.lastPathSegment)
         db.collection("games").add(game).addOnSuccessListener {
-            Toast.makeText(context, "Game Added", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "Game Added", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
             Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
         }
+
+        val imageRef = storage.child("${image.lastPathSegment}")
+        val uploadTask = imageRef.putFile(image).addOnSuccessListener {
+            Toast.makeText(context, "Image Added", Toast.LENGTH_SHORT).show()
+        }
+
+
     }
 
 }
