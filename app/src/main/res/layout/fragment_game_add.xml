@@ -195,7 +195,8 @@
                 android:ems="10"
                 android:inputType="date"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView10"
-                app:layout_constraintStart_toStartOf="@+id/guideline" />
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                android:focusable="false"/>
 
             <EditText
                 android:id="@+id/GameAddCompDate"
@@ -204,7 +205,8 @@
                 android:ems="10"
                 android:inputType="date"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView11"
-                app:layout_constraintStart_toStartOf="@+id/guideline" />
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                android:focusable="false"/>
 
             <Button
                 android:id="@+id/GameAddSave"

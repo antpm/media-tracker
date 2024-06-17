@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "ca.anthony.mediatracker"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -50,6 +50,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation ("com.google.android.material:material:1.4.0")
 
 
     //glide, for loading images from firebase storage
