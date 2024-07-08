@@ -135,7 +135,6 @@
                 android:layout_height="48dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name"
                 app:layout_constraintBaseline_toBaselineOf="@id/GameAddTitleLabel"
                 app:layout_constraintStart_toEndOf="@+id/GameAddTitleLabel" />
 
@@ -145,7 +144,6 @@
                 android:layout_height="48dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
                 app:layout_constraintStart_toEndOf="@+id/textView5" />
 
@@ -155,7 +153,6 @@
                 android:layout_height="48dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
                 app:layout_constraintStart_toStartOf="@+id/guideline" />
 
@@ -165,7 +162,6 @@
                 android:layout_height="48dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
                 app:layout_constraintStart_toStartOf="@+id/guideline" />
 
@@ -175,7 +171,6 @@
                 android:layout_height="48dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView8"
                 app:layout_constraintStart_toStartOf="@+id/guideline" />
 

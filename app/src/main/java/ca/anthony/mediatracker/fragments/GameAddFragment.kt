@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.models.Game
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -102,7 +103,11 @@ class GameAddFragment : Fragment() {
         }
 
         saveButton.setOnClickListener {
-            saveGame()
+            validateInput(it)
+        }
+
+        cancelButton.setOnClickListener {
+            Navigation.findNavController(view).popBackStack()
         }
     }
 
@@ -143,16 +148,36 @@ class GameAddFragment : Fragment() {
     private fun saveGame(){
         val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), image.lastPathSegment)
         db.collection("games").add(game).addOnSuccessListener {
-            //Toast.makeText(context, "Game Added", Toast.LENGTH_SHORT).show()
+
+            Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
+            val imageRef = storage.child("${image.lastPathSegment}")
+            val uploadTask = imageRef.putFile(image).addOnSuccessListener {
+                //Toast.makeText(context, "Image Added", Toast.LENGTH_SHORT).show()
+            }
         }.addOnFailureListener {
             Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
         }
 
-        val imageRef = storage.child("${image.lastPathSegment}")
-        val uploadTask = imageRef.putFile(image).addOnSuccessListener {
-            Toast.makeText(context, "Image Added", Toast.LENGTH_SHORT).show()
+
+    }
+
+    private fun validateInput(view: View){
+        //maybe add more validation checking later
+        if (!checkBlank()){
+            if (rating.text.toString().toInt() < 5 || rating.text.toString().toInt() >= 0){
+                Toast.makeText(requireActivity(), "Rating must be a number between 1 and 5", Toast.LENGTH_LONG).show()
+            } else {
+                saveGame()
+                Navigation.findNavController(view).popBackStack()
+            }
+        } else {
+            Toast.makeText(requireActivity(), "All fields must be filled out", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    private fun checkBlank(): Boolean{
+        return (title.text.isEmpty() || developer.text.isEmpty() || publisher.text.isEmpty() || platform.text.isEmpty() || genre.text.isEmpty() || rating.text.isEmpty() || releaseDateTxt.text.isEmpty() || completeDateTxt.text.isEmpty())
 
     }
 
