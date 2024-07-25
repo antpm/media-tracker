@@ -7,6 +7,7 @@
 
     <!-- Home Screen Labels -->
     <string name="home_latest">Your Latest</string>
+    <string name="game_latest">Latest Game:</string>
 
 
     <!-- Game & Game Detail Screen Labels -->

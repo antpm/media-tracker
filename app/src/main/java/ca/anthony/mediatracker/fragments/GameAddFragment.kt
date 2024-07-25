@@ -146,7 +146,7 @@ class GameAddFragment : Fragment() {
     }
 
     private fun saveGame(view: View){
-        var imageName: String = "noimage.jpg"
+        var imageName = "noimage.jpg"
         if (image != Uri.EMPTY ) imageName = image.lastPathSegment.toString()
         val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
         db.collection("games").add(game).addOnSuccessListener {
@@ -154,12 +154,8 @@ class GameAddFragment : Fragment() {
             Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
             if (image != Uri.EMPTY){
                 val imageRef = storage.child("${image.lastPathSegment}")
-                val uploadTask = imageRef.putFile(image).addOnSuccessListener {
-                    //Toast.makeText(context, "Image Added", Toast.LENGTH_SHORT).show()
-
-                }
+                imageRef.putFile(image)
             }
-
             Navigation.findNavController(view).popBackStack()
 
         }.addOnFailureListener {

@@ -20,7 +20,7 @@ import com.google.firebase.firestore.firestore
 
 class GamesFragment : Fragment() {
 
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
 
     private var gameList: ArrayList<Game> = arrayListOf()
     private lateinit var gameRecycler: RecyclerView
