@@ -55,7 +55,7 @@ class GameAddFragment : Fragment() {
     //values
     private var releaseDate: Long = 0
     private var completeDate:Long = 0
-    private lateinit var image: Uri
+    private var image: Uri = Uri.EMPTY
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
@@ -145,15 +145,23 @@ class GameAddFragment : Fragment() {
         return fileName
     }
 
-    private fun saveGame(){
-        val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), image.lastPathSegment)
+    private fun saveGame(view: View){
+        var imageName: String = "noimage.jpg"
+        if (image != Uri.EMPTY ) imageName = image.lastPathSegment.toString()
+        val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
         db.collection("games").add(game).addOnSuccessListener {
 
             Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
-            val imageRef = storage.child("${image.lastPathSegment}")
-            val uploadTask = imageRef.putFile(image).addOnSuccessListener {
-                //Toast.makeText(context, "Image Added", Toast.LENGTH_SHORT).show()
+            if (image != Uri.EMPTY){
+                val imageRef = storage.child("${image.lastPathSegment}")
+                val uploadTask = imageRef.putFile(image).addOnSuccessListener {
+                    //Toast.makeText(context, "Image Added", Toast.LENGTH_SHORT).show()
+
+                }
             }
+
+            Navigation.findNavController(view).popBackStack()
+
         }.addOnFailureListener {
             Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
         }
@@ -164,11 +172,11 @@ class GameAddFragment : Fragment() {
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
-            if (rating.text.toString().toInt() < 5 || rating.text.toString().toInt() >= 0){
+            if (rating.text.toString().toInt() > 5 || rating.text.toString().toInt() <= 0){
                 Toast.makeText(requireActivity(), "Rating must be a number between 1 and 5", Toast.LENGTH_LONG).show()
             } else {
-                saveGame()
-                Navigation.findNavController(view).popBackStack()
+                saveGame(view)
+
             }
         } else {
             Toast.makeText(requireActivity(), "All fields must be filled out", Toast.LENGTH_SHORT).show()
