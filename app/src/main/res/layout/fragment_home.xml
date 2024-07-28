@@ -18,77 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/HomeGameImage"
-                        android:layout_width="139dp"
-                        android:layout_height="189dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:src="@tools:sample/avatars" />
-
-                    <TextView
-                        android:id="@+id/HomeGameTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/game_title"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toEndOf="@+id/HomeGameImage"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/HomeGameRating"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/game_rating"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toEndOf="@+id/HomeGameImage"
-                        app:layout_constraintTop_toBottomOf="@+id/HomeGameTitle" />
-
-                    <TextView
-                        android:id="@+id/HomeGameCompleteDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/game_complete_date"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toEndOf="@+id/HomeGameImage"
-                        app:layout_constraintTop_toBottomOf="@+id/HomeGameRating" />
-
-                    <Button
-                        android:id="@+id/HomeGameViewDetailsButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/game_details_button"
-                        android:textColor="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/HomeGameImage"
-                        app:layout_constraintTop_toBottomOf="@+id/HomeGameCompleteDate" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/lbl_latest"
@@ -113,6 +43,21 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_latest" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/HomeGameRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                tools:itemCount="1"
+                tools:listitem="@layout/recycler_home_latest_game" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

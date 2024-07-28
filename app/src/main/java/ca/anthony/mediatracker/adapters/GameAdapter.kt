@@ -20,8 +20,8 @@ import java.util.Locale
 
 class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
+    //gets context for use in various methods
     private var context: Context? = null
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
