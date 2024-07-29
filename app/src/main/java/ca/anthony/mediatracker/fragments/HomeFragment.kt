@@ -52,10 +52,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun getLatestGame(){
+        var id = ""
         val data = db.collection("games").orderBy("complete", Query.Direction.DESCENDING).limit(1).get()
         data.addOnSuccessListener {docs ->
             for (doc in docs){
                 game = doc.toObject(Game::class.java)
+                id = doc.id
             }
 
             if (game.title != null){
@@ -63,7 +65,7 @@ class HomeFragment : Fragment() {
                 imageRef.downloadUrl.addOnSuccessListener{
                     image = it
 
-                    gameAdapter = HomeGameAdapter(game, image)
+                    gameAdapter = HomeGameAdapter(game, image, id)
                     gameRecycler.layoutManager = LinearLayoutManager(context)
                     gameRecycler.adapter = gameAdapter
 

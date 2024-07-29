@@ -3,5 +3,5 @@ package ca.anthony.mediatracker.models
 import java.io.Serializable
 import java.util.Date
 
-class Game(var title:String? = null, var developer:String? = null, var publisher:String? = null, var platform:String? = null, var genre:String? = null, var rating:Int? =null, var release:Date? = null,  var complete: Date? = null, var image:String? = null ): Serializable{
+class Game(var title:String? = null, var developer:String? = null, var publisher:String? = null, var platform:String? = null, var genre:String? = null, var rating:Int? =null, var release:Date? = null,  var complete: Date? = null, var image:String? = null): Serializable{
 }

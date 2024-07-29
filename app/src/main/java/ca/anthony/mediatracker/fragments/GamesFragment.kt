@@ -23,8 +23,9 @@ class GamesFragment : Fragment() {
     private val db = Firebase.firestore
 
     private var gameList: ArrayList<Game> = arrayListOf()
+    private var gameIDList: ArrayList<String> = arrayListOf()
     private lateinit var gameRecycler: RecyclerView
-    private var gameAdapter = GameAdapter(gameList)
+    private var gameAdapter = GameAdapter(gameList, gameIDList)
     private lateinit var addButton: FloatingActionButton
 
 
@@ -63,7 +64,10 @@ class GamesFragment : Fragment() {
         data.addOnSuccessListener {docs ->
             for (doc in docs){
                 val game = doc.toObject(Game::class.java)
+                gameIDList.add(doc.id)
                 gameList.add(game)
+                Log.d("Game Title", game.title.toString())
+                Log.d("Game ID", doc.id)
             }
             gameAdapter.notifyDataSetChanged()
         }.addOnFailureListener { exception->

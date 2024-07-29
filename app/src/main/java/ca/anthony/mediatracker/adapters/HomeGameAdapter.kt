@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class HomeGameAdapter(private val game: Game, private val image: Uri): RecyclerView.Adapter<HomeGameAdapter.ViewHolder>() {
+class HomeGameAdapter(private val game: Game, private val image: Uri, private val id: String): RecyclerView.Adapter<HomeGameAdapter.ViewHolder>() {
 
     //gets context for use in various methods
     private lateinit var context: Context
@@ -32,7 +32,6 @@ class HomeGameAdapter(private val game: Game, private val image: Uri): RecyclerV
     }
 
     override fun onBindViewHolder(holder: HomeGameAdapter.ViewHolder, position: Int) {
-        val game = game
         holder.gameTitle.text = game.title
 
         Glide.with(context).load(image).into(holder.gameImage)
@@ -46,6 +45,7 @@ class HomeGameAdapter(private val game: Game, private val image: Uri): RecyclerV
         holder.gameDetailsButton.setOnClickListener{
             val bundle = Bundle()
             bundle.putSerializable("game", game)
+            bundle.putString("id", id)
             Navigation.findNavController(holder.itemView).navigate(R.id.action_home_fragment_to_game_detail_fragment, bundle)
 
         }

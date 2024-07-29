@@ -1,6 +1,7 @@
 package ca.anthony.mediatracker.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.Navigation
 import androidx.navigation.Navigator
 import androidx.navigation.findNavController
@@ -24,6 +26,7 @@ import java.util.Locale
 class GameDetailsFragment : Fragment() {
 
     private var game = Game()
+    private var id = ""
     private lateinit var closeButton: ImageButton
     private lateinit var navBar: BottomNavigationView
 
@@ -47,6 +50,12 @@ class GameDetailsFragment : Fragment() {
         //disable the navbar when the fragment loads
         navBar = requireActivity().findViewById(R.id.BottomNav)
         //navBar.visibility = View.GONE
+
+        setFragmentResultListener("game edited"){key, bundle ->
+            game = bundle.getSerializable("game") as Game
+            id = bundle.getString("id") as String
+            setDetails()
+        }
     }
 
     override fun onCreateView(
@@ -60,12 +69,14 @@ class GameDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         game = arguments?.getSerializable("game") as Game
+        id = arguments?.getString("id") as String
         closeButton = requireActivity().findViewById(R.id.GameDetailCloseButton)
         closeButton.setOnClickListener {
             //closes the fragment and re-enables the navbar
             //requireActivity().findNavController(view).popBackStack()
             Navigation.findNavController(view).popBackStack()
         }
+        Log.d("Game ID", id)
         image = view.findViewById(R.id.GameDetailImage)
         title = view.findViewById(R.id.GameDetailTitle)
         rating = view.findViewById(R.id.GameDetailRating)
@@ -80,6 +91,7 @@ class GameDetailsFragment : Fragment() {
         editButton.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("game", game)
+            bundle.putString("id", id)
             Navigation.findNavController(it).navigate(R.id.action_game_detail_fragment_to_game_add_fragment, bundle)
         }
 

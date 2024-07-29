@@ -18,7 +18,7 @@ import ca.anthony.mediatracker.models.Game
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<GameAdapter.ViewHolder>() {
+class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList: ArrayList<String>): RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
     //gets context for use in various methods
     private var context: Context? = null
@@ -35,6 +35,7 @@ class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<G
     override fun onBindViewHolder(holder: GameAdapter.ViewHolder, position: Int) {
         //get game from list
         val game = gameList[position]
+        val id = gameIDList[position]
 
         //set simple text to fields
         holder.gameTitle.text = game.title
@@ -51,6 +52,7 @@ class GameAdapter(private val gameList: ArrayList<Game>): RecyclerView.Adapter<G
         holder.gameButton.setOnClickListener{
             val bundle = Bundle()
             bundle.putSerializable("game", game)
+            bundle.putString("id", id)
             Navigation.findNavController(holder.itemView).navigate(R.id.action_game_fragment_to_game_detail_fragment, bundle)
 
         }

@@ -14,6 +14,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.models.Game
@@ -35,6 +37,9 @@ class GameAddFragment : Fragment() {
 
     private val db = Firebase.firestore
     private val storage =  Firebase.storage.reference.child("images/games")
+    private var editGame = Game()
+    private var editID = ""
+    private var oldImage = ""
 
     //fields
     private lateinit var title: EditText
@@ -98,8 +103,9 @@ class GameAddFragment : Fragment() {
         cancelButton = view.findViewById(R.id.GameAddCancelButton)
 
 
-        val editGame = arguments?.getSerializable("game") as Game
-        if (editGame.title != null){
+        if (arguments != null){
+            editGame = arguments?.getSerializable("game") as Game
+            editID = arguments?.getString("id") as String
             enableEditing(editGame)
         }
 
@@ -128,6 +134,9 @@ class GameAddFragment : Fragment() {
         //set editing true
         editing = true
 
+        //save old image name for comparison later
+        oldImage = editGame.image.toString()
+
         val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
         //change header
@@ -141,8 +150,10 @@ class GameAddFragment : Fragment() {
         genre.setText(editGame.genre)
         rating.setText(editGame.rating.toString())
         val rDate = dateFormatter.format(Date(editGame.release!!.toInstant().toEpochMilli()))
+        releaseDate = editGame.release!!.toInstant().toEpochMilli()
         releaseDateTxt.setText(rDate)
         val cDate = dateFormatter.format(Date(editGame.complete!!.toInstant().toEpochMilli()))
+        completeDate = editGame.complete!!.toInstant().toEpochMilli()
         completeDateTxt.setText(cDate)
         imageText.text = editGame.image
 
@@ -184,21 +195,41 @@ class GameAddFragment : Fragment() {
 
     private fun saveGame(view: View){
         var imageName = "noimage.jpg"
+        if (editing) imageName = imageText.text.toString()
         if (image != Uri.EMPTY ) imageName = image.lastPathSegment.toString()
         val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
-        db.collection("games").add(game).addOnSuccessListener {
 
-            Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
-            if (image != Uri.EMPTY){
-                val imageRef = storage.child("${image.lastPathSegment}")
-                imageRef.putFile(image)
+        //if editing, set over existing game
+        if (editing){
+            val gameRef = db.collection("games").document(editID).set(game).addOnSuccessListener {
+                Toast.makeText(context, "Game Updated", Toast.LENGTH_LONG).show()
+                //check if the image has been updated, if so upload new image and delete old image
+                if (game.image != oldImage && image != Uri.EMPTY){
+                    val imageRef = storage.child("${image.lastPathSegment}")
+                    imageRef.child(oldImage).delete()
+                    imageRef.putFile(image)
+                }
+                val bundle = Bundle()
+                bundle.putSerializable("game", game)
+                bundle.putString("id", editID)
+                setFragmentResult("game edited", bundle)
+                Navigation.findNavController(view).popBackStack()
+
+            }.addOnFailureListener {
+                Toast.makeText(context, "Game Not Updated", Toast.LENGTH_SHORT).show()
             }
-            Navigation.findNavController(view).popBackStack()
-
-        }.addOnFailureListener {
-            Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
+        } else {
+            db.collection("games").add(game).addOnSuccessListener {
+                Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
+                if (image != Uri.EMPTY){
+                    val imageRef = storage.child("${image.lastPathSegment}")
+                    imageRef.putFile(image)
+                }
+                Navigation.findNavController(view).popBackStack()
+            }.addOnFailureListener {
+                Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
+            }
         }
-
 
     }
 
