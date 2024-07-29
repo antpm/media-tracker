@@ -24,6 +24,7 @@
 
     <!-- Game Add Labels -->
     <string name="game_add_label">Add New Game</string>
+    <string name="game_edit_label">Edit Game</string>
     <string name="game_add_title">Title:</string>
     <string name="game_add_comp_date">Completion Date:</string>
     <string name="game_add_release_date">Release Date:</string>

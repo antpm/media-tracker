@@ -28,8 +28,8 @@ class HomeFragment : Fragment() {
     private val gameStorage = Firebase.storage.reference.child("images/games")
 
     //game variables
-    private lateinit var game: Game
-    private lateinit var image: Uri
+    private var game: Game = Game()
+    private var image: Uri = Uri.EMPTY
     private lateinit var gameAdapter: HomeGameAdapter
     private lateinit var gameRecycler: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,15 +58,18 @@ class HomeFragment : Fragment() {
                 game = doc.toObject(Game::class.java)
             }
 
-            val imageRef = gameStorage.child(game.image.toString())
-            imageRef.downloadUrl.addOnSuccessListener{
-                image = it
+            if (game.title != null){
+                val imageRef = gameStorage.child(game.image.toString())
+                imageRef.downloadUrl.addOnSuccessListener{
+                    image = it
 
-                gameAdapter = HomeGameAdapter(game, image)
-                gameRecycler.layoutManager = LinearLayoutManager(context)
-                gameRecycler.adapter = gameAdapter
+                    gameAdapter = HomeGameAdapter(game, image)
+                    gameRecycler.layoutManager = LinearLayoutManager(context)
+                    gameRecycler.adapter = gameAdapter
 
+                }
             }
+
 
         }
 

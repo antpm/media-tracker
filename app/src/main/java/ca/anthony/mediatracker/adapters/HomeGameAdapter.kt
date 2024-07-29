@@ -2,12 +2,14 @@ package ca.anthony.mediatracker.adapters
 
 import android.content.Context
 import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.models.Game
@@ -40,6 +42,13 @@ class HomeGameAdapter(private val game: Game, private val image: Uri): RecyclerV
         holder.gameComplete.text = context.getString(R.string.game_complete_date, format.format(game.complete!!))
 
         holder.gameRating.text = context.getString(R.string.game_rating, game.rating)
+
+        holder.gameDetailsButton.setOnClickListener{
+            val bundle = Bundle()
+            bundle.putSerializable("game", game)
+            Navigation.findNavController(holder.itemView).navigate(R.id.action_home_fragment_to_game_detail_fragment, bundle)
+
+        }
     }
 
     override fun getItemCount(): Int {

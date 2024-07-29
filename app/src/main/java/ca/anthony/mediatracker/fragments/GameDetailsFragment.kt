@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -39,6 +40,8 @@ class GameDetailsFragment : Fragment() {
     private lateinit var completeDate: TextView
     private lateinit var releaseDate: TextView
 
+    private lateinit var editButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //disable the navbar when the fragment loads
@@ -72,6 +75,13 @@ class GameDetailsFragment : Fragment() {
         platform = view.findViewById(R.id.GameDetailPlatform)
         completeDate = view.findViewById(R.id.GameDetailCompleteDate)
         releaseDate = view.findViewById(R.id.GameDetailReleaseDate)
+        editButton = view.findViewById(R.id.GameDetailEditButton)
+
+        editButton.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable("game", game)
+            Navigation.findNavController(it).navigate(R.id.action_game_detail_fragment_to_game_add_fragment, bundle)
+        }
 
         setDetails()
     }

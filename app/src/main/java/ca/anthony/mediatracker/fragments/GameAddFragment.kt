@@ -47,6 +47,8 @@ class GameAddFragment : Fragment() {
     private lateinit var completeDateTxt: EditText
     private lateinit var imageText: TextView
 
+    private lateinit var header: TextView
+
     //buttons
     private lateinit var imageButton: Button
     private lateinit var saveButton: Button
@@ -56,6 +58,7 @@ class GameAddFragment : Fragment() {
     private var releaseDate: Long = 0
     private var completeDate:Long = 0
     private var image: Uri = Uri.EMPTY
+    private var editing = false
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
@@ -75,6 +78,9 @@ class GameAddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         title = view.findViewById(R.id.GameAddTitle)
         developer = view.findViewById(R.id.GameAddDev)
         publisher = view.findViewById(R.id.GameAddPublisher)
@@ -85,10 +91,17 @@ class GameAddFragment : Fragment() {
         completeDateTxt = view.findViewById(R.id.GameAddCompDate)
         imageText = view.findViewById(R.id.GameAddImageName)
 
+        header = view.findViewById(R.id.GameAddLabel)
+
         imageButton = view.findViewById(R.id.GameAddImageButton)
         saveButton = view.findViewById(R.id.GameAddSaveButton)
         cancelButton = view.findViewById(R.id.GameAddCancelButton)
 
+
+        val editGame = arguments?.getSerializable("game") as Game
+        if (editGame.title != null){
+            enableEditing(editGame)
+        }
 
         releaseDateTxt.setOnClickListener {
             showDatePicker(releaseDateTxt)
@@ -109,6 +122,30 @@ class GameAddFragment : Fragment() {
         cancelButton.setOnClickListener {
             Navigation.findNavController(view).popBackStack()
         }
+    }
+
+    private fun enableEditing(editGame: Game) {
+        //set editing true
+        editing = true
+
+        val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
+
+        //change header
+        header.text = context?.getString(R.string.game_edit_label)
+
+        //set values in fields
+        title.setText(editGame.title)
+        developer.setText(editGame.developer)
+        publisher.setText(editGame.publisher)
+        platform.setText(editGame.platform)
+        genre.setText(editGame.genre)
+        rating.setText(editGame.rating.toString())
+        val rDate = dateFormatter.format(Date(editGame.release!!.toInstant().toEpochMilli()))
+        releaseDateTxt.setText(rDate)
+        val cDate = dateFormatter.format(Date(editGame.complete!!.toInstant().toEpochMilli()))
+        completeDateTxt.setText(cDate)
+        imageText.text = editGame.image
+
     }
 
     private fun showDatePicker(textField:EditText){
