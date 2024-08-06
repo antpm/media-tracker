@@ -6,7 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,9 @@ class GamesFragment : Fragment() {
     private lateinit var gameRecycler: RecyclerView
     private var gameAdapter = GameAdapter(gameList, gameIDList)
     private lateinit var addButton: FloatingActionButton
+    private lateinit var sortOpen: ImageButton
+    private lateinit var sortClose: ImageButton
+    private lateinit var textTextView: TextView
 
 
     override fun onCreateView(
@@ -39,6 +43,22 @@ class GamesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sortOpen = view.findViewById(R.id.GameSortOptionsOpen)
+        sortClose = view.findViewById(R.id.GameSortOptionsClose)
+        textTextView = view.findViewById(R.id.GameTestText)
+        textTextView.visibility = View.GONE
+        sortOpen.setOnClickListener {
+            textTextView.visibility = View.VISIBLE
+            sortOpen.visibility = View.INVISIBLE
+            sortClose.visibility = View.VISIBLE
+        }
+
+        sortClose.setOnClickListener {
+            textTextView.visibility = View.GONE
+            sortOpen.visibility = View.VISIBLE
+            sortClose.visibility = View.INVISIBLE
+        }
 
         gameRecycler = view.findViewById(R.id.GameRecycler)
         gameRecycler.layoutManager = LinearLayoutManager(context)

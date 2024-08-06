@@ -12,6 +12,10 @@
 
     <!-- Game & Game Detail Screen Labels -->
     <string name="game_title">Title</string>
+    <string name="game_sort">Sort By:</string>
+    <string name="game_sort_release">Release Date</string>
+    <string name="game_sort_complete">Completion Date</string>
+    <string name="game_sort_rating">Rating</string>
     <string name="game_complete_date">Completion Date: %1$s</string>
     <string name="game_rating">Rating: %1$d/5</string>
     <string name="game_platform">Platform: %1$s</string>
