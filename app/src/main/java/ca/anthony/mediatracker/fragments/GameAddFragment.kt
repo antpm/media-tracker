@@ -18,6 +18,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
+import ca.anthony.mediatracker.databinding.FragmentGameAddBinding
 import ca.anthony.mediatracker.models.Game
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Firebase
@@ -35,6 +36,9 @@ import java.util.Locale
 
 class GameAddFragment : Fragment() {
 
+    private var _binding: FragmentGameAddBinding? = null
+    private val binding get() = _binding!!
+
     private val db = Firebase.firestore
     private val storage =  Firebase.storage.reference.child("images/games")
     private var editGame = Game()
@@ -42,22 +46,22 @@ class GameAddFragment : Fragment() {
     private var oldImage = ""
 
     //fields
-    private lateinit var title: EditText
-    private lateinit var developer: EditText
-    private lateinit var publisher: EditText
-    private lateinit var platform: EditText
-    private lateinit var genre: EditText
-    private lateinit var rating: EditText
-    private lateinit var releaseDateTxt: EditText
-    private lateinit var completeDateTxt: EditText
-    private lateinit var imageText: TextView
+    //private lateinit var title: EditText
+    //private lateinit var developer: EditText
+    //private lateinit var publisher: EditText
+    //private lateinit var platform: EditText
+    //private lateinit var genre: EditText
+    //private lateinit var rating: EditText
+    //private lateinit var releaseDateTxt: EditText
+    //private lateinit var completeDateTxt: EditText
+    //private lateinit var imageText: TextView
 
-    private lateinit var header: TextView
+    //private lateinit var header: TextView
 
     //buttons
-    private lateinit var imageButton: Button
-    private lateinit var saveButton: Button
-    private lateinit var cancelButton: Button
+    //private lateinit var imageButton: Button
+    //private lateinit var saveButton: Button
+    //private lateinit var cancelButton: Button
 
     //values
     private var releaseDate: Long = 0
@@ -69,16 +73,23 @@ class GameAddFragment : Fragment() {
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         val fileName = getFileNameFromUri(requireActivity(), it!!)
         image = it
-        imageText.text = image.lastPathSegment
+        binding.GameAddImageName.text = image.lastPathSegment
     }
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game_add, container, false)
+        _binding = FragmentGameAddBinding.inflate(inflater,container,false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,21 +97,21 @@ class GameAddFragment : Fragment() {
 
 
 
-        title = view.findViewById(R.id.GameAddTitle)
-        developer = view.findViewById(R.id.GameAddDev)
-        publisher = view.findViewById(R.id.GameAddPublisher)
-        platform = view.findViewById(R.id.GameAddPlatform)
-        genre = view.findViewById(R.id.GameAddGenre)
-        rating = view.findViewById(R.id.GameAddRating)
-        releaseDateTxt = view.findViewById(R.id.GameAddReleaseDate)
-        completeDateTxt = view.findViewById(R.id.GameAddCompDate)
-        imageText = view.findViewById(R.id.GameAddImageName)
+        //title = view.findViewById(R.id.GameAddTitle)
+        //developer = view.findViewById(R.id.GameAddDev)
+        //publisher = view.findViewById(R.id.GameAddPublisher)
+        //platform = view.findViewById(R.id.GameAddPlatform)
+        //genre = view.findViewById(R.id.GameAddGenre)
+        //rating = view.findViewById(R.id.GameAddRating)
+        //releaseDateTxt = view.findViewById(R.id.GameAddReleaseDate)
+        //completeDateTxt = view.findViewById(R.id.GameAddCompDate)
+        //imageText = view.findViewById(R.id.GameAddImageName)
 
-        header = view.findViewById(R.id.GameAddLabel)
+        //header = view.findViewById(R.id.GameAddLabel)
 
-        imageButton = view.findViewById(R.id.GameAddImageButton)
-        saveButton = view.findViewById(R.id.GameAddSaveButton)
-        cancelButton = view.findViewById(R.id.GameAddCancelButton)
+        //imageButton = view.findViewById(R.id.GameAddImageButton)
+        //saveButton = view.findViewById(R.id.GameAddSaveButton)
+        //cancelButton = view.findViewById(R.id.GameAddCancelButton)
 
 
         if (arguments != null){
@@ -109,23 +120,23 @@ class GameAddFragment : Fragment() {
             enableEditing(editGame)
         }
 
-        releaseDateTxt.setOnClickListener {
-            showDatePicker(releaseDateTxt)
+        binding.GameAddReleaseDate.setOnClickListener {
+            showDatePicker(binding.GameAddReleaseDate)
         }
 
-        completeDateTxt.setOnClickListener {
-            showDatePicker(completeDateTxt)
+        binding.GameAddCompDate.setOnClickListener {
+            showDatePicker(binding.GameAddCompDate)
         }
 
-        imageButton.setOnClickListener {
+        binding.GameAddImageButton.setOnClickListener {
             galleryLauncher.launch("image/*")
         }
 
-        saveButton.setOnClickListener {
+        binding.GameAddSaveButton.setOnClickListener {
             validateInput(it)
         }
 
-        cancelButton.setOnClickListener {
+        binding.GameAddCancelButton.setOnClickListener {
             Navigation.findNavController(view).popBackStack()
         }
     }
@@ -140,22 +151,22 @@ class GameAddFragment : Fragment() {
         val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
         //change header
-        header.text = context?.getString(R.string.game_edit_label)
+        binding.GameAddLabel.text = context?.getString(R.string.game_edit_label)
 
         //set values in fields
-        title.setText(editGame.title)
-        developer.setText(editGame.developer)
-        publisher.setText(editGame.publisher)
-        platform.setText(editGame.platform)
-        genre.setText(editGame.genre)
-        rating.setText(editGame.rating.toString())
+        binding.GameAddTitle.setText(editGame.title)
+        binding.GameAddDev.setText(editGame.developer)
+        binding.GameAddPublisher.setText(editGame.publisher)
+        binding.GameAddPlatform.setText(editGame.platform)
+        binding.GameAddGenre.setText(editGame.genre)
+        binding.GameAddRating.setText(editGame.rating.toString())
         val rDate = dateFormatter.format(Date(editGame.release!!.toInstant().toEpochMilli()))
         releaseDate = editGame.release!!.toInstant().toEpochMilli()
-        releaseDateTxt.setText(rDate)
+        binding.GameAddReleaseDate.setText(rDate)
         val cDate = dateFormatter.format(Date(editGame.complete!!.toInstant().toEpochMilli()))
         completeDate = editGame.complete!!.toInstant().toEpochMilli()
-        completeDateTxt.setText(cDate)
-        imageText.text = editGame.image
+        binding.GameAddCompDate.setText(cDate)
+        binding.GameAddImageName.text = editGame.image
 
     }
 
@@ -173,12 +184,12 @@ class GameAddFragment : Fragment() {
             val date = dateFormatter.format(Date(myTimeZoneDate.toInstant().toEpochMilli()))
 
             //set values based on textfield that was clicked
-            if (textField == releaseDateTxt){
+            if (textField == binding.GameAddReleaseDate){
                 releaseDate = myTimeZoneDate.toInstant().toEpochMilli()
-                releaseDateTxt.setText(date)
-            } else if (textField == completeDateTxt){
+                binding.GameAddReleaseDate.setText(date)
+            } else if (textField == binding.GameAddCompDate){
                 completeDate = myTimeZoneDate.toInstant().toEpochMilli()
-                completeDateTxt.setText(date)
+                binding.GameAddCompDate.setText(date)
             }
         }
     }
@@ -195,9 +206,9 @@ class GameAddFragment : Fragment() {
 
     private fun saveGame(view: View){
         var imageName = "noimage.jpg"
-        if (editing) imageName = imageText.text.toString()
+        if (editing) imageName = binding.GameAddImageName.text.toString()
         if (image != Uri.EMPTY ) imageName = image.lastPathSegment.toString()
-        val game = Game(title.text.toString(), developer.text.toString(), publisher.text.toString(),platform.text.toString(), genre.text.toString(), rating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
+        val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(), binding.GameAddPublisher.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
 
         //if editing, set over existing game
         if (editing){
@@ -236,7 +247,7 @@ class GameAddFragment : Fragment() {
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
-            if (rating.text.toString().toInt() > 5 || rating.text.toString().toInt() <= 0){
+            if (binding.GameAddRating.text.toString().toInt() > 5 || binding.GameAddRating.text.toString().toInt() <= 0){
                 Toast.makeText(requireActivity(), "Rating must be a number between 1 and 5", Toast.LENGTH_LONG).show()
             } else {
                 saveGame(view)
@@ -249,7 +260,7 @@ class GameAddFragment : Fragment() {
     }
 
     private fun checkBlank(): Boolean{
-        return (title.text.isEmpty() || developer.text.isEmpty() || publisher.text.isEmpty() || platform.text.isEmpty() || genre.text.isEmpty() || rating.text.isEmpty() || releaseDateTxt.text.isEmpty() || completeDateTxt.text.isEmpty())
+        return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPublisher.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.text.isEmpty() || binding.GameAddReleaseDate.text.isEmpty() || binding.GameAddCompDate.text.isEmpty())
 
     }
 
