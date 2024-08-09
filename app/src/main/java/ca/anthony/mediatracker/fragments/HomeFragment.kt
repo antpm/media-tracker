@@ -33,6 +33,8 @@ class HomeFragment : Fragment() {
     //private lateinit var gameRecycler: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
+        navBar.visibility = View.VISIBLE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,8 +53,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navBar = view.findViewById<BottomNavigationView>(R.id.BottomNav)
-        navBar.visibility = View.VISIBLE
 
         getLatestGame()
 

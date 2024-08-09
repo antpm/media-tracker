@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import ca.anthony.mediatracker.R
@@ -52,6 +53,22 @@ class LogIn : Fragment() {
 
         binding.LogInCreateAccount.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_log_in_to_sign_up)
+        }
+
+        binding.LogInButton.setOnClickListener {
+            if (binding.LogInEmail.text.isEmpty() || binding.LogInPassword.text.isEmpty()){
+                Toast.makeText(requireActivity(), "Please fill out all fields", Toast.LENGTH_SHORT).show()
+            } else {
+                auth.signInWithEmailAndPassword(binding.LogInEmail.text.toString(), binding.LogInPassword.text.toString())
+                    .addOnCompleteListener { task->
+                        if (task.isSuccessful){
+                            Toast.makeText(requireActivity(), "Login Succesful", Toast.LENGTH_SHORT).show()
+                            Navigation.findNavController(view).navigate(R.id.action_log_in_to_home_fragment)
+                        } else {
+                            Toast.makeText(requireActivity(), "Email/Password Incorrect", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            }
         }
     }
 }
