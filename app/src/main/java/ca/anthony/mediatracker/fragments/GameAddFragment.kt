@@ -45,24 +45,6 @@ class GameAddFragment : Fragment() {
     private var editID = ""
     private var oldImage = ""
 
-    //fields
-    //private lateinit var title: EditText
-    //private lateinit var developer: EditText
-    //private lateinit var publisher: EditText
-    //private lateinit var platform: EditText
-    //private lateinit var genre: EditText
-    //private lateinit var rating: EditText
-    //private lateinit var releaseDateTxt: EditText
-    //private lateinit var completeDateTxt: EditText
-    //private lateinit var imageText: TextView
-
-    //private lateinit var header: TextView
-
-    //buttons
-    //private lateinit var imageButton: Button
-    //private lateinit var saveButton: Button
-    //private lateinit var cancelButton: Button
-
     //values
     private var releaseDate: Long = 0
     private var completeDate:Long = 0
@@ -94,25 +76,6 @@ class GameAddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
-        //title = view.findViewById(R.id.GameAddTitle)
-        //developer = view.findViewById(R.id.GameAddDev)
-        //publisher = view.findViewById(R.id.GameAddPublisher)
-        //platform = view.findViewById(R.id.GameAddPlatform)
-        //genre = view.findViewById(R.id.GameAddGenre)
-        //rating = view.findViewById(R.id.GameAddRating)
-        //releaseDateTxt = view.findViewById(R.id.GameAddReleaseDate)
-        //completeDateTxt = view.findViewById(R.id.GameAddCompDate)
-        //imageText = view.findViewById(R.id.GameAddImageName)
-
-        //header = view.findViewById(R.id.GameAddLabel)
-
-        //imageButton = view.findViewById(R.id.GameAddImageButton)
-        //saveButton = view.findViewById(R.id.GameAddSaveButton)
-        //cancelButton = view.findViewById(R.id.GameAddCancelButton)
-
 
         if (arguments != null){
             editGame = arguments?.getSerializable("game") as Game
@@ -241,7 +204,6 @@ class GameAddFragment : Fragment() {
                 Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     private fun validateInput(view: View){
@@ -256,12 +218,10 @@ class GameAddFragment : Fragment() {
         } else {
             Toast.makeText(requireActivity(), "All fields must be filled out", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun checkBlank(): Boolean{
         return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPublisher.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.text.isEmpty() || binding.GameAddReleaseDate.text.isEmpty() || binding.GameAddCompDate.text.isEmpty())
 
     }
-
 }

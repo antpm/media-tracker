@@ -31,23 +31,9 @@ class GameDetailsFragment : Fragment() {
 
     private var game = Game()
     private var id = ""
-    //private lateinit var closeButton: ImageButton
     private lateinit var navBar: BottomNavigationView
 
     private val storage = Firebase.storage.reference.child("images/games")
-
-    //details
-    //private lateinit var image: ImageView
-    //private lateinit var title: TextView
-   // private lateinit var rating: ImageView
-    //private lateinit var developer: TextView
-    //private lateinit var publisher: TextView
-    //private lateinit var genre: TextView
-    //private lateinit var platform: TextView
-    //private lateinit var completeDate: TextView
-    //private lateinit var releaseDate: TextView
-
-    //private lateinit var editButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,17 +68,7 @@ class GameDetailsFragment : Fragment() {
             //requireActivity().findNavController(view).popBackStack()
             Navigation.findNavController(view).popBackStack()
         }
-        Log.d("Game ID", id)
-        //image = view.findViewById(R.id.GameDetailImage)
-        //title = view.findViewById(R.id.GameDetailTitle)
-        //rating = view.findViewById(R.id.GameDetailRating)
-        //developer = view.findViewById(R.id.GameDetailDeveloper)
-        //publisher = view.findViewById(R.id.GameDetailPublisher)
-        //genre = view.findViewById(R.id.GameDetailGenre)
-        //platform = view.findViewById(R.id.GameDetailPlatform)
-        //completeDate = view.findViewById(R.id.GameDetailCompleteDate)
-        //releaseDate = view.findViewById(R.id.GameDetailReleaseDate)
-        //editButton = view.findViewById(R.id.GameDetailEditButton)
+        //Log.d("Game ID", id)
 
         binding.GameDetailEditButton.setOnClickListener {
             val bundle = Bundle()

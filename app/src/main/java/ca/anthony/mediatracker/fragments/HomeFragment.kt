@@ -73,13 +73,8 @@ class HomeFragment : Fragment() {
                     gameAdapter = HomeGameAdapter(game, image, id)
                     binding.HomeGameRecycler.layoutManager = LinearLayoutManager(context)
                     binding.HomeGameRecycler.adapter = gameAdapter
-
                 }
             }
-
-
         }
-
-
     }
 }
