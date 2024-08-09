@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
@@ -14,6 +16,8 @@ import ca.anthony.mediatracker.databinding.FragmentHomeBinding
 import ca.anthony.mediatracker.models.Game
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
@@ -22,6 +26,9 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var auth: FirebaseAuth
+
 
     private val db = Firebase.firestore
     private val gameStorage = Firebase.storage.reference.child("images/games")
@@ -53,6 +60,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        auth = Firebase.auth
+        val user = auth.currentUser
+
+        binding.HomeWelcome.text = requireActivity().getString(R.string.home_welcome, user!!.displayName)
+
+        binding.HomeLogOut.setOnClickListener {
+            auth.signOut()
+            Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
+            Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
+        }
 
         getLatestGame()
 

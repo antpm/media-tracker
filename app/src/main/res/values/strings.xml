@@ -16,8 +16,9 @@
     <string name="name_placeholder">Display Name</string>
 
     <!-- Home Screen Labels -->
-    <string name="home_latest">Your Latest</string>
+    <string name="home_welcome">Welcome %1$s</string>
     <string name="game_latest">Latest Game:</string>
+    <string name="log_out_button">Log Out</string>
 
 
     <!-- Game & Game Detail Screen Labels -->

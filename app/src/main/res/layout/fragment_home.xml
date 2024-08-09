@@ -12,22 +12,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/HomeLogOut">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
-
             <TextView
-                android:id="@+id/lbl_latest"
+                android:id="@+id/HomeWelcome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="109dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="110dp"
-                android:text="@string/home_latest"
+                android:text="@string/home_welcome"
                 android:textSize="34sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +40,7 @@
                 android:text="@string/game_latest"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_latest" />
+                app:layout_constraintTop_toBottomOf="@+id/HomeWelcome" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/HomeGameRecycler"
@@ -58,7 +56,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
                 tools:itemCount="1"
                 tools:listitem="@layout/recycler_home_latest_game" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/HomeLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:drawableRight="@drawable/log_out"
+        android:text="@string/log_out_button"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
