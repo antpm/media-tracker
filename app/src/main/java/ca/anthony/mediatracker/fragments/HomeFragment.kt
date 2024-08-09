@@ -12,6 +12,7 @@ import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.adapters.HomeGameAdapter
 import ca.anthony.mediatracker.databinding.FragmentHomeBinding
 import ca.anthony.mediatracker.models.Game
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
@@ -50,7 +51,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //gameRecycler = view.findViewById(R.id.HomeGameRecycler)
+        val navBar = view.findViewById<BottomNavigationView>(R.id.BottomNav)
+        navBar.visibility = View.VISIBLE
 
         getLatestGame()
 

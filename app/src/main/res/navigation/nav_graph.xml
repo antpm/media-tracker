@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/home_fragment">
+    app:startDestination="@id/log_in">
 
     <fragment
         android:id="@+id/home_fragment"
@@ -43,4 +43,24 @@
         android:name="ca.anthony.mediatracker.fragments.GameAddFragment"
         android:label="fragment_game_add"
         tools:layout="@layout/fragment_game_add" />
+    <fragment
+        android:id="@+id/log_in"
+        android:name="ca.anthony.mediatracker.fragments.LogIn"
+        android:label="fragment_log_in"
+        tools:layout="@layout/fragment_log_in" >
+        <action
+            android:id="@+id/action_log_in_to_sign_up"
+            app:destination="@id/sign_up" />
+        <action
+            android:id="@+id/action_log_in_to_home_fragment"
+            app:destination="@id/home_fragment"
+            app:popUpTo="@+id/log_in"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/sign_up"
+        android:name="ca.anthony.mediatracker.fragments.SignUp"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
 </navigation>
