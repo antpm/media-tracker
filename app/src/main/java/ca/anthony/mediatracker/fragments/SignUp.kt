@@ -15,6 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.firestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class SignUp : Fragment() {
 
@@ -51,6 +54,13 @@ class SignUp : Fragment() {
                     displayName = binding.SignUpName.text.toString()
                 }
 
+                val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
+                val currentDate = dateFormatter.format(Date())
+
+                val userData = hashMapOf(
+                    "join" to currentDate
+                )
+
                 auth.createUserWithEmailAndPassword(binding.SignUpEmail.text.toString(), binding.SignUpPass.text.toString())
                     .addOnCompleteListener{task->
                         if (task.isSuccessful){
@@ -59,8 +69,12 @@ class SignUp : Fragment() {
                             val user = auth.currentUser
                             user!!.updateProfile(profile)
 
-                            auth.signOut()
-                            Navigation.findNavController(view).popBackStack()
+                            db.collection("users").document(user!!.uid).set(userData).addOnSuccessListener {
+                                auth.signOut()
+                                Navigation.findNavController(view).popBackStack()
+                            }
+
+
                         }
                     }
             }

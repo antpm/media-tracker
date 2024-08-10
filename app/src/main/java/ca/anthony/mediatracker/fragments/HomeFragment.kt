@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
 
     private fun getLatestGame(){
         var id = ""
-        val data = db.collection("games").orderBy("complete", Query.Direction.DESCENDING).limit(1).get()
+        val data = db.collection("users").document(auth.currentUser!!.uid).collection("games").orderBy("complete", Query.Direction.DESCENDING).limit(1).get()
         data.addOnSuccessListener {docs ->
             for (doc in docs){
                 game = doc.toObject(Game::class.java)

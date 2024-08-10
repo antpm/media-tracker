@@ -22,6 +22,8 @@ import ca.anthony.mediatracker.databinding.FragmentGameAddBinding
 import ca.anthony.mediatracker.models.Game
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
 import java.io.File
@@ -40,6 +42,7 @@ class GameAddFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val db = Firebase.firestore
+    private lateinit var auth: FirebaseAuth
     private val storage =  Firebase.storage.reference.child("images/games")
     private var editGame = Game()
     private var editID = ""
@@ -76,6 +79,8 @@ class GameAddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        auth = Firebase.auth
 
         if (arguments != null){
             editGame = arguments?.getSerializable("game") as Game
@@ -175,7 +180,7 @@ class GameAddFragment : Fragment() {
 
         //if editing, set over existing game
         if (editing){
-            val gameRef = db.collection("games").document(editID).set(game).addOnSuccessListener {
+            val gameRef = db.collection("users").document(auth.currentUser!!.uid).collection("games").document(editID).set(game).addOnSuccessListener {
                 Toast.makeText(context, "Game Updated", Toast.LENGTH_LONG).show()
                 //check if the image has been updated, if so upload new image and delete old image
                 if (game.image != oldImage && image != Uri.EMPTY){
@@ -193,7 +198,7 @@ class GameAddFragment : Fragment() {
                 Toast.makeText(context, "Game Not Updated", Toast.LENGTH_SHORT).show()
             }
         } else {
-            db.collection("games").add(game).addOnSuccessListener {
+            db.collection("users").document(auth.currentUser!!.uid).collection("games").add(game).addOnSuccessListener {
                 Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
                 if (image != Uri.EMPTY){
                     val imageRef = storage.child("${image.lastPathSegment}")

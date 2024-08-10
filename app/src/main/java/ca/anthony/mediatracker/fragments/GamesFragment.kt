@@ -17,12 +17,15 @@ import ca.anthony.mediatracker.databinding.FragmentGamesBinding
 import ca.anthony.mediatracker.models.Game
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 
 class GamesFragment : Fragment() {
 
     private val db = Firebase.firestore
+    private lateinit var auth: FirebaseAuth
 
     private var _binding: FragmentGamesBinding? = null
     private val binding get() = _binding!!
@@ -49,6 +52,8 @@ class GamesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        auth = Firebase.auth
 
 
         binding.GameTestText.visibility = View.GONE
@@ -78,15 +83,14 @@ class GamesFragment : Fragment() {
 
     private fun loadGames(){
         gameList.clear()
-        val data = db.collection("games").orderBy("complete").get()
+        val data = db.collection("users").document(auth.currentUser!!.uid).collection("games").orderBy("complete").get()
 
         data.addOnSuccessListener {docs ->
             for (doc in docs){
                 val game = doc.toObject(Game::class.java)
                 gameIDList.add(doc.id)
                 gameList.add(game)
-                //Log.d("Game Title", game.title.toString())
-                //Log.d("Game ID", doc.id)
+
             }
             gameAdapter.notifyDataSetChanged()
         }.addOnFailureListener { exception->
