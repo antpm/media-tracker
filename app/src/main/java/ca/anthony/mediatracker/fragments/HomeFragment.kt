@@ -57,6 +57,8 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
+    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -67,6 +69,8 @@ class HomeFragment : Fragment() {
 
         binding.HomeLogOut.setOnClickListener {
             auth.signOut()
+            val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
+            navBar.visibility = View.INVISIBLE
             Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
             Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
         }
