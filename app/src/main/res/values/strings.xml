@@ -5,9 +5,20 @@
     <string name="home">Home</string>
     <string name="games">Games</string>
 
+    <!-- Log In/Sign Up Screen labels -->
+    <string name="log_in_label">Please enter your login information</string>
+    <string name="email_placeholder">Email Address</string>
+    <string name="password_placeholder">Password</string>
+    <string name="no_account_label">No Account? Click below to create one</string>
+    <string name="log_in_button">Log In</string>
+    <string name="sign_up_button">Create Account</string>
+    <string name="sign_up_label">Sign Up</string>
+    <string name="name_placeholder">Display Name</string>
+
     <!-- Home Screen Labels -->
-    <string name="home_latest">Your Latest</string>
+    <string name="home_welcome">Welcome %1$s</string>
     <string name="game_latest">Latest Game:</string>
+    <string name="log_out_button">Log Out</string>
 
 
     <!-- Game & Game Detail Screen Labels -->
