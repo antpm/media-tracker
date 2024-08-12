@@ -38,9 +38,9 @@ class HomeGameAdapter(private val game: Game, private val image: Uri, private va
 
 
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-        holder.gameComplete.text = context.getString(R.string.game_complete_date, format.format(game.complete!!))
+        holder.gameComplete.text = context.getString(R.string.complete_date, format.format(game.complete!!))
 
-        holder.gameRating.text = context.getString(R.string.game_rating, game.rating)
+        holder.gameRating.text = context.getString(R.string.rating, game.rating)
 
         holder.gameDetailsButton.setOnClickListener{
             val bundle = Bundle()

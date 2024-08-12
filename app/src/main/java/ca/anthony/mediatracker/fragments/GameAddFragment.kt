@@ -9,12 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
@@ -26,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
-import java.io.File
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -119,7 +115,7 @@ class GameAddFragment : Fragment() {
         val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
         //change header
-        binding.GameAddLabel.text = context?.getString(R.string.game_edit_label)
+        binding.GameAddLabel.text = context?.getString(R.string.edit_game_label)
 
         //set values in fields
         binding.GameAddTitle.setText(editGame.title)

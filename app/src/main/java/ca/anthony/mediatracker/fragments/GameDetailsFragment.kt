@@ -1,19 +1,12 @@
 package ca.anthony.mediatracker.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.Navigation
-import androidx.navigation.Navigator
-import androidx.navigation.findNavController
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.databinding.FragmentGameDetailsBinding
 import ca.anthony.mediatracker.models.Game
@@ -102,20 +95,20 @@ class GameDetailsFragment : Fragment() {
         //set release date and complete date
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
-        binding.GameDetailReleaseDate.text = requireActivity().getString(R.string.game_release_date, format.format(game.release!!))
-        binding.GameDetailCompleteDate.text = requireActivity().getString(R.string.game_complete_date, format.format(game.complete!!))
+        binding.GameDetailReleaseDate.text = requireActivity().getString(R.string.release_date, format.format(game.release!!))
+        binding.GameDetailCompleteDate.text = requireActivity().getString(R.string.complete_date, format.format(game.complete!!))
 
         //set dev
-        binding.GameDetailDeveloper.text = requireActivity().getString(R.string.game_developer, game.developer)
+        binding.GameDetailDeveloper.text = requireActivity().getString(R.string.developer, game.developer)
 
         //set pub
-        binding.GameDetailPublisher.text =requireActivity().getString(R.string.game_publisher, game.publisher)
+        binding.GameDetailPublisher.text =requireActivity().getString(R.string.publisher, game.publisher)
 
         //set platform
-        binding.GameDetailPlatform.text = requireActivity().getString(R.string.game_platform, game.platform)
+        binding.GameDetailPlatform.text = requireActivity().getString(R.string.platform, game.platform)
 
         //set genre
-        binding.GameDetailGenre.text = requireActivity().getString(R.string.game_genre, game.genre)
+        binding.GameDetailGenre.text = requireActivity().getString(R.string.genre, game.genre)
     }
 
 }
