@@ -21,6 +21,9 @@
             app:destination="@id/log_in"
             app:popUpTo="@+id/nav_graph"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_home_fragment_to_books_fragment"
+            app:destination="@id/books_fragment" />
     </fragment>
     <fragment
         android:id="@+id/game_fragment"
@@ -68,4 +71,9 @@
         android:name="ca.anthony.mediatracker.fragments.SignUp"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/books_fragment"
+        android:name="ca.anthony.mediatracker.fragments.BooksFragment"
+        android:label="fragment_books"
+        tools:layout="@layout/fragment_books" />
 </navigation>
