@@ -63,7 +63,7 @@ class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList:
         val gamePlatform: TextView = itemView.findViewById(R.id.GamePlatform)
         val gameDate: TextView = itemView.findViewById(R.id.GameCompleteDate)
         val gameRating: TextView = itemView.findViewById(R.id.GameRating)
-        val gameButton: Button = itemView.findViewById(R.id.GameButton)
+        val gameButton: Button = itemView.findViewById(R.id.GameListDetailButton)
     }
 
 }

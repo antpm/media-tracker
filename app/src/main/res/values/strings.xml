@@ -4,6 +4,7 @@
     <!-- Screen names -->
     <string name="home">Home</string>
     <string name="games">Games</string>
+    <string name="books">Books</string>
 
     <!-- Log In/Sign Up Screen labels -->
     <string name="log_in_label">Please enter your login information</string>
@@ -24,6 +25,7 @@
     <!-- List and Detail Screen Labels -->
     <string name="title">Title</string>
     <string name="author">Author</string>
+    <string name="sort_options">Sorting Options</string>
     <string name="sort">Sort By:</string>
     <string name="sort_release">Release Date</string>
     <string name="sort_complete">Completion Date</string>

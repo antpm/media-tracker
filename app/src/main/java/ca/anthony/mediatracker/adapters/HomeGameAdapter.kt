@@ -60,6 +60,6 @@ class HomeGameAdapter(private val game: Game, private val image: Uri, private va
         val gameTitle: TextView = itemView.findViewById(R.id.HomeGameTitle)
         val gameRating: TextView = itemView.findViewById(R.id.HomeGameRating)
         val gameComplete: TextView = itemView.findViewById(R.id.HomeGameCompleteDate)
-        val gameDetailsButton: Button = itemView.findViewById(R.id.HomeGameViewDetailsButton)
+        val gameDetailsButton: Button = itemView.findViewById(R.id.HomeGameDetailsButton)
     }
 }
