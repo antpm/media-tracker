@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,13 +68,38 @@ class HomeFragment : Fragment() {
 
         binding.HomeWelcome.text = requireActivity().getString(R.string.home_welcome, user!!.displayName)
 
-        binding.HomeLogOut.setOnClickListener {
-            auth.signOut()
-            val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
-            navBar.visibility = View.INVISIBLE
-            Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
-            Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
+        binding.HomeToolbar.inflateMenu(R.menu.menu_home)
+        binding.HomeToolbar.setOnMenuItemClickListener {
+            when (it.itemId){
+                R.id.log_out -> {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+                    builder
+                        .setTitle("Do you want to log out?")
+                        .setPositiveButton("Confirm"){dialog, which ->
+                            auth.signOut()
+                            val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
+                            navBar.visibility = View.INVISIBLE
+                            Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
+                            Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
+                        }
+
+                        .setNegativeButton("Cancel"){dialog, which->
+
+                        }
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                    true
+                }
+                R.id.account ->{
+                    //will do this later
+                    true
+                }
+                else -> {
+                    super.onOptionsItemSelected(it)
+                }
+            }
         }
+
 
         getLatestGame()
 
