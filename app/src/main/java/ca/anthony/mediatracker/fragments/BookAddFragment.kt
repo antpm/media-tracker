@@ -83,7 +83,7 @@ class BookAddFragment : Fragment() {
         if (arguments != null){
             editBook = arguments?.getSerializable("book") as Book
             editID = arguments?.getString("id") as String
-            //enableEditing(editBook)
+            enableEditing(editBook)
         }
 
         binding.BookAddReleaseDate.setOnClickListener {
@@ -129,6 +129,34 @@ class BookAddFragment : Fragment() {
                 binding.BookAddCompDate.setText(date)
             }
         }
+    }
+
+    private fun enableEditing(editBook: Book) {
+        //set editing true
+        editing = true
+
+        //save old image name for comparison later
+        oldImage = editBook.image.toString()
+
+        val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
+
+        //change header
+        binding.BookAddLabel.text = context?.getString(R.string.edit_game_label)
+
+        //set values in fields
+        binding.BookAddTitle.setText(editBook.title)
+        binding.BookAddAuthor.setText(editBook.author)
+        binding.BookAddPublisher.setText(editBook.publisher)
+        binding.BookAddGenre.setText(editBook.genre)
+        binding.BookAddRating.setText(editBook.rating.toString())
+        val rDate = dateFormatter.format(Date(editBook.release!!.toInstant().toEpochMilli()))
+        releaseDate = editBook.release!!.toInstant().toEpochMilli()
+        binding.BookAddReleaseDate.setText(rDate)
+        val cDate = dateFormatter.format(Date(editBook.complete!!.toInstant().toEpochMilli()))
+        completeDate = editBook.complete!!.toInstant().toEpochMilli()
+        binding.BookAddCompDate.setText(cDate)
+        binding.BookAddImageName.text = editBook.image
+
     }
 
     private fun saveBook(view: View){

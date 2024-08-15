@@ -1,11 +1,13 @@
 package ca.anthony.mediatracker.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.models.Book
@@ -37,7 +39,10 @@ class BookAdapter(private val bookList: ArrayList<Book>, private val bookIDList:
         holder.bookRating.text = context?.getString(R.string.rating, book.rating)
 
         holder.bookButton.setOnClickListener {
-            //TODO: setup detail button after detail screen is made
+            val bundle = Bundle()
+            bundle.putSerializable("book", book)
+            bundle.putString("id", id)
+            Navigation.findNavController(holder.itemView).navigate(R.id.action_books_fragment_to_book_details_fragment, bundle)
         }
     }
 

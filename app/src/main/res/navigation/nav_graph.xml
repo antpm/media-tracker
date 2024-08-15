@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_home_fragment_to_books_fragment"
             app:destination="@id/books_fragment" />
+        <action
+            android:id="@+id/action_home_fragment_to_book_details_fragment"
+            app:destination="@id/book_details_fragment" />
     </fragment>
     <fragment
         android:id="@+id/game_fragment"
@@ -79,10 +82,22 @@
         <action
             android:id="@+id/action_books_fragment_to_book_add_fragment"
             app:destination="@id/book_add_fragment" />
+        <action
+            android:id="@+id/action_books_fragment_to_book_details_fragment"
+            app:destination="@id/book_details_fragment" />
     </fragment>
     <fragment
         android:id="@+id/book_add_fragment"
         android:name="ca.anthony.mediatracker.fragments.BookAddFragment"
         android:label="fragment_book_add"
         tools:layout="@layout/fragment_book_add" />
+    <fragment
+        android:id="@+id/book_details_fragment"
+        android:name="ca.anthony.mediatracker.fragments.BookDetailsFragment"
+        android:label="fragment_book_details"
+        tools:layout="@layout/fragment_book_details" >
+        <action
+            android:id="@+id/action_book_details_fragment_to_book_add_fragment"
+            app:destination="@id/book_add_fragment" />
+    </fragment>
 </navigation>
