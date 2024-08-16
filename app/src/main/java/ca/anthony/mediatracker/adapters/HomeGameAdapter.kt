@@ -32,15 +32,17 @@ class HomeGameAdapter(private val game: Game, private val image: Uri, private va
     }
 
     override fun onBindViewHolder(holder: HomeGameAdapter.ViewHolder, position: Int) {
-        holder.gameTitle.text = game.title
 
+
+        //set image
         Glide.with(context).load(image).into(holder.gameImage)
 
-
+        //set rest of fields
+        holder.gameTitle.text = game.title
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-        holder.gameComplete.text = context.getString(R.string.game_complete_date, format.format(game.complete!!))
+        holder.gameComplete.text = context.getString(R.string.complete_date, format.format(game.complete!!))
 
-        holder.gameRating.text = context.getString(R.string.game_rating, game.rating)
+        holder.gameRating.text = context.getString(R.string.rating, game.rating)
 
         holder.gameDetailsButton.setOnClickListener{
             val bundle = Bundle()
@@ -60,6 +62,6 @@ class HomeGameAdapter(private val game: Game, private val image: Uri, private va
         val gameTitle: TextView = itemView.findViewById(R.id.HomeGameTitle)
         val gameRating: TextView = itemView.findViewById(R.id.HomeGameRating)
         val gameComplete: TextView = itemView.findViewById(R.id.HomeGameCompleteDate)
-        val gameDetailsButton: Button = itemView.findViewById(R.id.HomeGameViewDetailsButton)
+        val gameDetailsButton: Button = itemView.findViewById(R.id.HomeGameDetailsButton)
     }
 }

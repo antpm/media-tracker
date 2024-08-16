@@ -4,6 +4,7 @@
     <!-- Screen names -->
     <string name="home">Home</string>
     <string name="games">Games</string>
+    <string name="books">Books</string>
 
     <!-- Log In/Sign Up Screen labels -->
     <string name="log_in_label">Please enter your login information</string>
@@ -18,40 +19,50 @@
     <!-- Home Screen Labels -->
     <string name="home_welcome">Welcome %1$s</string>
     <string name="game_latest">Latest Game:</string>
+    <string name="book_latest">Latest Book:</string>
     <string name="log_out_button">Log Out</string>
+    <string name="account_button">Account</string>
 
 
-    <!-- Game & Game Detail Screen Labels -->
-    <string name="game_title">Title</string>
-    <string name="game_sort">Sort By:</string>
-    <string name="game_sort_release">Release Date</string>
-    <string name="game_sort_complete">Completion Date</string>
-    <string name="game_sort_rating">Rating</string>
-    <string name="game_complete_date">Completion Date: %1$s</string>
-    <string name="game_rating">Rating: %1$d/5</string>
-    <string name="game_platform">Platform: %1$s</string>
+    <!-- List and Detail Screen Labels -->
+    <string name="title">Title</string>
+    <string name="author">Author</string>
+    <string name="sort_options">Sorting Options</string>
+    <string name="sort">Sort By:</string>
+    <string name="sort_release">Release Date</string>
+    <string name="sort_complete">Completion Date</string>
+    <string name="sort_rating">Rating</string>
+    <string name="complete_date">Completion Date: %1$s</string>
+    <string name="rating">Rating: %1$d/5</string>
+    <string name="platform">Platform: %1$s</string>
     <string name="game_details_button">View Game</string>
-    <string name="game_genre">Genre: %1$s</string>
-    <string name="game_publisher">Publisher: %1$s</string>
-    <string name="game_developer">Developer: %1$s</string>
-    <string name="game_release_date">Release Date: %1$s</string>
+    <string name="book_details_button">View Book</string>
+    <string name="genre">Genre: %1$s</string>
+    <string name="publisher">Publisher: %1$s</string>
+    <string name="developer">Developer: %1$s</string>
+    <string name="release_date">Release Date: %1$s</string>
     <string name="game_edit_button">Edit Game Details</string>
+    <string name="book_edit_button">Edit Book Details</string>
 
-    <!-- Game Add Labels -->
-    <string name="game_add_label">Add New Game</string>
-    <string name="game_edit_label">Edit Game</string>
-    <string name="game_add_title">Title:</string>
-    <string name="game_add_comp_date">Completion Date:</string>
-    <string name="game_add_release_date">Release Date:</string>
-    <string name="game_add_rating">Rating:</string>
-    <string name="game_add_developer">Developer:</string>
-    <string name="game_add_publisher">Publisher:</string>
-    <string name="game_add_image">Image:</string>
-    <string name="game_add_platform">Platform:</string>
-    <string name="game_add_genre">Genre:</string>
-    <string name="game_add_save_button">Save Game</string>
-    <string name="game_add_cancel_button">Cancel</string>
-    <string name="game_add_image_button">Select Image</string>
+    <!-- Add Screen Labels -->
+    <string name="add_game_label">Add New Game</string>
+    <string name="add_book_label">Add New Book</string>
+    <string name="edit_game_label">Edit Game</string>
+    <string name="edit_book_label">Edit Book</string>
+    <string name="add_title">Title:</string>
+    <string name="add_author">Author:</string>
+    <string name="add_comp_date">Completion Date:</string>
+    <string name="add_release_date">Release Date:</string>
+    <string name="add_rating">Rating:</string>
+    <string name="add_developer">Developer:</string>
+    <string name="add_publisher">Publisher:</string>
+    <string name="add_image">Image:</string>
+    <string name="add_platform">Platform:</string>
+    <string name="add_genre">Genre:</string>
+    <string name="add_save_game">Save Game</string>
+    <string name="add_save_book">Save Book</string>
+    <string name="add_cancel">Cancel</string>
+    <string name="add_image_button">Select Image</string>
 
     <string name="placeholder">placeholder</string>
     <!-- TODO: Remove or change this placeholder text -->

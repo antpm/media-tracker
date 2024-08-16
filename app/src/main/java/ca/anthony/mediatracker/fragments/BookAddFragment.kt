@@ -15,7 +15,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
+import ca.anthony.mediatracker.databinding.FragmentBookAddBinding
 import ca.anthony.mediatracker.databinding.FragmentGameAddBinding
+import ca.anthony.mediatracker.models.Book
 import ca.anthony.mediatracker.models.Game
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Firebase
@@ -32,15 +34,16 @@ import java.time.ZonedDateTime
 import java.util.Date
 import java.util.Locale
 
-class GameAddFragment : Fragment() {
 
-    private var _binding: FragmentGameAddBinding? = null
+class BookAddFragment : Fragment() {
+
+    private var _binding: FragmentBookAddBinding? = null
     private val binding get() = _binding!!
 
     private val db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
-    private val storage =  Firebase.storage.reference.child("images/games")
-    private var editGame = Game()
+    private val storage =  Firebase.storage.reference.child("images/books")
+    private var editBook = Book()
     private var editID = ""
     private var oldImage = ""
 
@@ -54,16 +57,15 @@ class GameAddFragment : Fragment() {
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         val fileName = getFileNameFromUri(requireActivity(), it!!)
         image = it
-        binding.GameAddImageName.text = image.lastPathSegment
+        binding.BookAddImageName.text = image.lastPathSegment
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentGameAddBinding.inflate(inflater,container,false)
+        _binding = FragmentBookAddBinding.inflate(inflater,container,false)
         val view = binding.root
         return view
     }
@@ -79,62 +81,33 @@ class GameAddFragment : Fragment() {
         auth = Firebase.auth
 
         if (arguments != null){
-            editGame = arguments?.getSerializable("game") as Game
+            editBook = arguments?.getSerializable("book") as Book
             editID = arguments?.getString("id") as String
-            enableEditing(editGame)
+            enableEditing(editBook)
         }
 
-        binding.GameAddReleaseDate.setOnClickListener {
-            showDatePicker(binding.GameAddReleaseDate)
+        binding.BookAddReleaseDate.setOnClickListener {
+            showDatePicker(binding.BookAddReleaseDate)
         }
 
-        binding.GameAddCompDate.setOnClickListener {
-            showDatePicker(binding.GameAddCompDate)
+        binding.BookAddCompDate.setOnClickListener {
+            showDatePicker(binding.BookAddCompDate)
         }
 
-        binding.GameAddImageButton.setOnClickListener {
+        binding.BookAddImageButton.setOnClickListener {
             galleryLauncher.launch("image/*")
         }
 
-        binding.GameAddSaveButton.setOnClickListener {
+        binding.BookAddSaveButton.setOnClickListener {
             validateInput(it)
         }
 
-        binding.GameAddCancelButton.setOnClickListener {
+        binding.BookAddCancelButton.setOnClickListener {
             Navigation.findNavController(view).popBackStack()
         }
     }
 
-    private fun enableEditing(editGame: Game) {
-        //set editing true
-        editing = true
-
-        //save old image name for comparison later
-        oldImage = editGame.image.toString()
-
-        val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-
-        //change header
-        binding.GameAddLabel.text = context?.getString(R.string.edit_game_label)
-
-        //set values in fields
-        binding.GameAddTitle.setText(editGame.title)
-        binding.GameAddDev.setText(editGame.developer)
-        binding.GameAddPublisher.setText(editGame.publisher)
-        binding.GameAddPlatform.setText(editGame.platform)
-        binding.GameAddGenre.setText(editGame.genre)
-        binding.GameAddRating.setText(editGame.rating.toString())
-        val rDate = dateFormatter.format(Date(editGame.release!!.toInstant().toEpochMilli()))
-        releaseDate = editGame.release!!.toInstant().toEpochMilli()
-        binding.GameAddReleaseDate.setText(rDate)
-        val cDate = dateFormatter.format(Date(editGame.complete!!.toInstant().toEpochMilli()))
-        completeDate = editGame.complete!!.toInstant().toEpochMilli()
-        binding.GameAddCompDate.setText(cDate)
-        binding.GameAddImageName.text = editGame.image
-
-    }
-
-    private fun showDatePicker(textField:EditText){
+    private fun showDatePicker(textField: EditText){
         val datePicker = MaterialDatePicker.Builder.datePicker().build()
         datePicker.show(parentFragmentManager, "DatePicker")
 
@@ -148,12 +121,79 @@ class GameAddFragment : Fragment() {
             val date = dateFormatter.format(Date(myTimeZoneDate.toInstant().toEpochMilli()))
 
             //set values based on textfield that was clicked
-            if (textField == binding.GameAddReleaseDate){
+            if (textField == binding.BookAddReleaseDate){
                 releaseDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.GameAddReleaseDate.setText(date)
-            } else if (textField == binding.GameAddCompDate){
+                binding.BookAddReleaseDate.setText(date)
+            } else if (textField == binding.BookAddCompDate){
                 completeDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.GameAddCompDate.setText(date)
+                binding.BookAddCompDate.setText(date)
+            }
+        }
+    }
+
+    private fun enableEditing(editBook: Book) {
+        //set editing true
+        editing = true
+
+        //save old image name for comparison later
+        oldImage = editBook.image.toString()
+
+        val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
+
+        //change header
+        binding.BookAddLabel.text = context?.getString(R.string.edit_game_label)
+
+        //set values in fields
+        binding.BookAddTitle.setText(editBook.title)
+        binding.BookAddAuthor.setText(editBook.author)
+        binding.BookAddPublisher.setText(editBook.publisher)
+        binding.BookAddGenre.setText(editBook.genre)
+        binding.BookAddRating.setText(editBook.rating.toString())
+        val rDate = dateFormatter.format(Date(editBook.release!!.toInstant().toEpochMilli()))
+        releaseDate = editBook.release!!.toInstant().toEpochMilli()
+        binding.BookAddReleaseDate.setText(rDate)
+        val cDate = dateFormatter.format(Date(editBook.complete!!.toInstant().toEpochMilli()))
+        completeDate = editBook.complete!!.toInstant().toEpochMilli()
+        binding.BookAddCompDate.setText(cDate)
+        binding.BookAddImageName.text = editBook.image
+
+    }
+
+    private fun saveBook(view: View){
+        var imageName = "noimage.jpg"
+        if (editing) imageName = binding.BookAddImageName.text.toString()
+        if (image != Uri.EMPTY ) imageName = image.lastPathSegment.toString()
+        val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddPublisher.text.toString(), binding.BookAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
+
+        //if editing, set over existing game
+        if (editing){
+            val gameRef = db.collection("users").document(auth.currentUser!!.uid).collection("books").document(editID).set(book).addOnSuccessListener {
+                Toast.makeText(context, "Book Updated", Toast.LENGTH_LONG).show()
+                //check if the image has been updated, if so upload new image and delete old image
+                if (book.image != oldImage && image != Uri.EMPTY){
+                    val imageRef = storage.child("${image.lastPathSegment}")
+                    imageRef.child(oldImage).delete()
+                    imageRef.putFile(image)
+                }
+                val bundle = Bundle()
+                bundle.putSerializable("book", book)
+                bundle.putString("id", editID)
+                setFragmentResult("book edited", bundle)
+                Navigation.findNavController(view).popBackStack()
+
+            }.addOnFailureListener {
+                Toast.makeText(context, "Book Not Updated", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            db.collection("users").document(auth.currentUser!!.uid).collection("books").add(book).addOnSuccessListener {
+                Toast.makeText(context, "Book Added", Toast.LENGTH_LONG).show()
+                if (image != Uri.EMPTY){
+                    val imageRef = storage.child("${image.lastPathSegment}")
+                    imageRef.putFile(image)
+                }
+                Navigation.findNavController(view).popBackStack()
+            }.addOnFailureListener {
+                Toast.makeText(context, "Book Not Added", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -168,52 +208,13 @@ class GameAddFragment : Fragment() {
         return fileName
     }
 
-    private fun saveGame(view: View){
-        var imageName = "noimage.jpg"
-        if (editing) imageName = binding.GameAddImageName.text.toString()
-        if (image != Uri.EMPTY ) imageName = image.lastPathSegment.toString()
-        val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(), binding.GameAddPublisher.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
-
-        //if editing, set over existing game
-        if (editing){
-            val gameRef = db.collection("users").document(auth.currentUser!!.uid).collection("games").document(editID).set(game).addOnSuccessListener {
-                Toast.makeText(context, "Game Updated", Toast.LENGTH_LONG).show()
-                //check if the image has been updated, if so upload new image and delete old image
-                if (game.image != oldImage && image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
-                    imageRef.child(oldImage).delete()
-                    imageRef.putFile(image)
-                }
-                val bundle = Bundle()
-                bundle.putSerializable("game", game)
-                bundle.putString("id", editID)
-                setFragmentResult("game edited", bundle)
-                Navigation.findNavController(view).popBackStack()
-
-            }.addOnFailureListener {
-                Toast.makeText(context, "Game Not Updated", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            db.collection("users").document(auth.currentUser!!.uid).collection("games").add(game).addOnSuccessListener {
-                Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
-                if (image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
-                    imageRef.putFile(image)
-                }
-                Navigation.findNavController(view).popBackStack()
-            }.addOnFailureListener {
-                Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
-            if (binding.GameAddRating.text.toString().toInt() > 5 || binding.GameAddRating.text.toString().toInt() <= 0){
+            if (binding.BookAddRating.text.toString().toInt() > 5 || binding.BookAddRating.text.toString().toInt() <= 0){
                 Toast.makeText(requireActivity(), "Rating must be a number between 1 and 5", Toast.LENGTH_LONG).show()
             } else {
-                saveGame(view)
+                saveBook(view)
 
             }
         } else {
@@ -222,7 +223,8 @@ class GameAddFragment : Fragment() {
     }
 
     private fun checkBlank(): Boolean{
-        return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPublisher.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.text.isEmpty() || binding.GameAddReleaseDate.text.isEmpty() || binding.GameAddCompDate.text.isEmpty())
+        return (binding.BookAddTitle.text.isEmpty() || binding.BookAddAuthor.text.isEmpty() || binding.BookAddPublisher.text.isEmpty() || binding.BookAddGenre.text.isEmpty() || binding.BookAddRating.text.isEmpty() || binding.BookAddReleaseDate.text.isEmpty() || binding.BookAddCompDate.text.isEmpty())
 
     }
+
 }

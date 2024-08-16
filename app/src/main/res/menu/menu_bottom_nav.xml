@@ -10,4 +10,8 @@
         android:title="@string/games"
         android:icon="@drawable/game"
         app:showAsAction="always" />
+    <item android:id="@+id/books_fragment"
+        android:title="@string/books"
+        android:icon="@drawable/book"
+        app:showAsAction="always"/>
 </menu>

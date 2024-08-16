@@ -56,15 +56,18 @@ class GamesFragment : Fragment() {
         auth = Firebase.auth
 
 
-        binding.GameTestText.visibility = View.GONE
+        //binding.GameTestText.visibility = View.GONE
+        binding.GameSortSubCard.visibility = View.GONE
         binding.GameSortOptionsOpen.setOnClickListener {
-            binding.GameTestText.visibility = View.VISIBLE
+            //binding.GameTestText.visibility = View.VISIBLE
+            binding.GameSortSubCard.visibility = View.VISIBLE
             binding.GameSortOptionsOpen.visibility = View.INVISIBLE
             binding.GameSortOptionsClose.visibility = View.VISIBLE
         }
 
         binding.GameSortOptionsClose.setOnClickListener {
-            binding.GameTestText.visibility = View.GONE
+            //binding.GameTestText.visibility = View.GONE
+            binding.GameSortSubCard.visibility = View.GONE
             binding.GameSortOptionsOpen.visibility = View.VISIBLE
             binding.GameSortOptionsClose.visibility = View.INVISIBLE
         }
