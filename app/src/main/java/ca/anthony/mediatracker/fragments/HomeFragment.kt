@@ -6,54 +6,114 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
+import ca.anthony.mediatracker.adapters.HomeBookAdapter
 import ca.anthony.mediatracker.adapters.HomeGameAdapter
+import ca.anthony.mediatracker.databinding.FragmentHomeBinding
+import ca.anthony.mediatracker.models.Book
 import ca.anthony.mediatracker.models.Game
-import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class HomeFragment : Fragment() {
 
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var auth: FirebaseAuth
+
+
     private val db = Firebase.firestore
     private val gameStorage = Firebase.storage.reference.child("images/games")
+    private val bookStorage = Firebase.storage.reference.child("images/books")
 
     //game variables
     private var game: Game = Game()
-    private var image: Uri = Uri.EMPTY
+    private var book: Book = Book()
+    private var gameImage: Uri = Uri.EMPTY
+    private var bookImage: Uri = Uri.EMPTY
     private lateinit var gameAdapter: HomeGameAdapter
-    private lateinit var gameRecycler: RecyclerView
+    private lateinit var bookAdapter: HomeBookAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
+        navBar.visibility = View.VISIBLE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
 
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gameRecycler = view.findViewById(R.id.HomeGameRecycler)
+        auth = Firebase.auth
+        val user = auth.currentUser
+
+        binding.HomeWelcome.text = requireActivity().getString(R.string.home_welcome, user!!.displayName)
+
+        binding.HomeToolbar.inflateMenu(R.menu.menu_home)
+        binding.HomeToolbar.setOnMenuItemClickListener {
+            when (it.itemId){
+                R.id.log_out -> {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+                    builder
+                        .setTitle("Do you want to log out?")
+                        .setPositiveButton("Confirm"){dialog, which ->
+                            auth.signOut()
+                            val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
+                            navBar.visibility = View.INVISIBLE
+                            Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
+                            Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
+                        }
+
+                        .setNegativeButton("Cancel"){dialog, which->
+
+                        }
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                    true
+                }
+                R.id.account ->{
+                    //will do this later
+                    true
+                }
+                else -> {
+                    super.onOptionsItemSelected(it)
+                }
+            }
+        }
+
 
         getLatestGame()
+        getLatestBook()
 
     }
 
     private fun getLatestGame(){
         var id = ""
-        val data = db.collection("games").orderBy("complete", Query.Direction.DESCENDING).limit(1).get()
+        val data = db.collection("users").document(auth.currentUser!!.uid).collection("games").orderBy("complete", Query.Direction.DESCENDING).limit(1).get()
         data.addOnSuccessListener {docs ->
             for (doc in docs){
                 game = doc.toObject(Game::class.java)
@@ -63,18 +123,35 @@ class HomeFragment : Fragment() {
             if (game.title != null){
                 val imageRef = gameStorage.child(game.image.toString())
                 imageRef.downloadUrl.addOnSuccessListener{
-                    image = it
+                    gameImage = it
 
-                    gameAdapter = HomeGameAdapter(game, image, id)
-                    gameRecycler.layoutManager = LinearLayoutManager(context)
-                    gameRecycler.adapter = gameAdapter
-
+                    gameAdapter = HomeGameAdapter(game, gameImage, id)
+                    binding.HomeGameRecycler.layoutManager = LinearLayoutManager(context)
+                    binding.HomeGameRecycler.adapter = gameAdapter
                 }
             }
-
-
         }
+    }
 
+    private fun getLatestBook(){
+        var id = ""
+        val data = db.collection("users").document(auth.currentUser!!.uid).collection("books").orderBy("complete", Query.Direction.DESCENDING).limit(1).get()
+        data.addOnSuccessListener {docs ->
+            for (doc in docs){
+                book = doc.toObject(Book::class.java)
+                id = doc.id
+            }
 
+            if (book.title != null){
+                val imageRef = bookStorage.child(book.image.toString())
+                imageRef.downloadUrl.addOnSuccessListener{
+                    bookImage = it
+
+                    bookAdapter = HomeBookAdapter(book, bookImage, id)
+                    binding.HomeBookRecycler.layoutManager = LinearLayoutManager(context)
+                    binding.HomeBookRecycler.adapter = bookAdapter
+                }
+            }
+        }
     }
 }

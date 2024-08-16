@@ -13,24 +13,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.adapters.GameAdapter
+import ca.anthony.mediatracker.databinding.FragmentGamesBinding
 import ca.anthony.mediatracker.models.Game
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 
 class GamesFragment : Fragment() {
 
     private val db = Firebase.firestore
+    private lateinit var auth: FirebaseAuth
+
+    private var _binding: FragmentGamesBinding? = null
+    private val binding get() = _binding!!
 
     private var gameList: ArrayList<Game> = arrayListOf()
     private var gameIDList: ArrayList<String> = arrayListOf()
-    private lateinit var gameRecycler: RecyclerView
     private var gameAdapter = GameAdapter(gameList, gameIDList)
-    private lateinit var addButton: FloatingActionButton
-    private lateinit var sortOpen: ImageButton
-    private lateinit var sortClose: ImageButton
-    private lateinit var textTextView: TextView
 
 
     override fun onCreateView(
@@ -38,39 +40,44 @@ class GamesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_games, container, false)
+        _binding = FragmentGamesBinding.inflate(inflater,container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sortOpen = view.findViewById(R.id.GameSortOptionsOpen)
-        sortClose = view.findViewById(R.id.GameSortOptionsClose)
-        textTextView = view.findViewById(R.id.GameTestText)
-        textTextView.visibility = View.GONE
-        sortOpen.setOnClickListener {
-            textTextView.visibility = View.VISIBLE
-            sortOpen.visibility = View.INVISIBLE
-            sortClose.visibility = View.VISIBLE
+        auth = Firebase.auth
+
+
+        //binding.GameTestText.visibility = View.GONE
+        binding.GameSortSubCard.visibility = View.GONE
+        binding.GameSortOptionsOpen.setOnClickListener {
+            //binding.GameTestText.visibility = View.VISIBLE
+            binding.GameSortSubCard.visibility = View.VISIBLE
+            binding.GameSortOptionsOpen.visibility = View.INVISIBLE
+            binding.GameSortOptionsClose.visibility = View.VISIBLE
         }
 
-        sortClose.setOnClickListener {
-            textTextView.visibility = View.GONE
-            sortOpen.visibility = View.VISIBLE
-            sortClose.visibility = View.INVISIBLE
+        binding.GameSortOptionsClose.setOnClickListener {
+            //binding.GameTestText.visibility = View.GONE
+            binding.GameSortSubCard.visibility = View.GONE
+            binding.GameSortOptionsOpen.visibility = View.VISIBLE
+            binding.GameSortOptionsClose.visibility = View.INVISIBLE
         }
 
-        gameRecycler = view.findViewById(R.id.GameRecycler)
-        gameRecycler.layoutManager = LinearLayoutManager(context)
-        gameRecycler.adapter = gameAdapter
-        addButton = view.findViewById(R.id.GameAddButton)
 
-        addButton.setOnClickListener {
-            //val addFragment = GameAddFragment()
-            //val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            //transaction.replace(R.id.NavHost, addFragment)
-            //transaction.addToBackStack(null)
-            //transaction.commit()
+        binding.GameRecycler.layoutManager = LinearLayoutManager(context)
+        binding.GameRecycler.adapter = gameAdapter
+
+
+        binding.GameAddButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_game_fragment_to_game_add_fragment)
         }
 
@@ -79,15 +86,14 @@ class GamesFragment : Fragment() {
 
     private fun loadGames(){
         gameList.clear()
-        val data = db.collection("games").orderBy("complete").get()
+        val data = db.collection("users").document(auth.currentUser!!.uid).collection("games").orderBy("complete").get()
 
         data.addOnSuccessListener {docs ->
             for (doc in docs){
                 val game = doc.toObject(Game::class.java)
                 gameIDList.add(doc.id)
                 gameList.add(game)
-                Log.d("Game Title", game.title.toString())
-                Log.d("Game ID", doc.id)
+
             }
             gameAdapter.notifyDataSetChanged()
         }.addOnFailureListener { exception->
