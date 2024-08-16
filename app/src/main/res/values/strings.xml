@@ -19,6 +19,7 @@
     <!-- Home Screen Labels -->
     <string name="home_welcome">Welcome %1$s</string>
     <string name="game_latest">Latest Game:</string>
+    <string name="book_latest">Latest Book:</string>
     <string name="log_out_button">Log Out</string>
     <string name="account_button">Account</string>
 

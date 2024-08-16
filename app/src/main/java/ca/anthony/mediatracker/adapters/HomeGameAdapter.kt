@@ -32,11 +32,13 @@ class HomeGameAdapter(private val game: Game, private val image: Uri, private va
     }
 
     override fun onBindViewHolder(holder: HomeGameAdapter.ViewHolder, position: Int) {
-        holder.gameTitle.text = game.title
 
+
+        //set image
         Glide.with(context).load(image).into(holder.gameImage)
 
-
+        //set rest of fields
+        holder.gameTitle.text = game.title
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
         holder.gameComplete.text = context.getString(R.string.complete_date, format.format(game.complete!!))
 
