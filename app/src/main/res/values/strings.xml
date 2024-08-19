@@ -5,6 +5,7 @@
     <string name="home">Home</string>
     <string name="games">Games</string>
     <string name="books">Books</string>
+    <string name="account">Account Management</string>
 
     <!-- Log In/Sign Up Screen labels -->
     <string name="log_in_label">Please enter your login information</string>
@@ -63,6 +64,16 @@
     <string name="add_save_book">Save Book</string>
     <string name="add_cancel">Cancel</string>
     <string name="add_image_button">Select Image</string>
+
+    <!--Account Management Labels -->
+    <string name="change_name">Change Display Name</string>
+    <string name="name">Display Name</string>
+    <string name="change_pass">Change Password</string>
+    <string name="old_pass">Old Password</string>
+    <string name="new_pass">New Password</string>
+    <string name="account_save">Save Changes</string>
+    <string name="account_cancel">Cancel</string>
+    <string name="account_delete">Delete Account</string>
 
     <string name="placeholder">placeholder</string>
     <!-- TODO: Remove or change this placeholder text -->
