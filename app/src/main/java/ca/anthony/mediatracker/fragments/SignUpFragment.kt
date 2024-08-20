@@ -67,7 +67,7 @@ class SignUpFragment : Fragment() {
                             val user = auth.currentUser
                             user!!.updateProfile(profile)
 
-                            db.collection("users").document(user!!.uid).set(userData).addOnSuccessListener {
+                            db.collection("users").document(user.uid).set(userData).addOnSuccessListener {
                                 auth.signOut()
                                 Navigation.findNavController(view).popBackStack()
                             }

@@ -31,6 +31,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
 
+    private lateinit var navBar: BottomNavigationView
+
 
     private val db = Firebase.firestore
     private val gameStorage = Firebase.storage.reference.child("images/games")
@@ -46,7 +48,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
+        navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
         navBar.visibility = View.VISIBLE
     }
 
@@ -82,7 +84,6 @@ class HomeFragment : Fragment() {
                         .setTitle("Do you want to log out?")
                         .setPositiveButton("Confirm"){dialog, which ->
                             auth.signOut()
-                            val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
                             navBar.visibility = View.INVISIBLE
                             Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
                             Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
@@ -96,7 +97,8 @@ class HomeFragment : Fragment() {
                     true
                 }
                 R.id.account ->{
-                    //will do this later
+                    navBar.visibility = View.INVISIBLE
+                    Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_account_fragment)
                     true
                 }
                 else -> {
