@@ -4,5 +4,8 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/primary</item>
+        <item name="subCardBackground">@color/dark_grey</item>
+        <item name="dangerButtonBG">@color/dark_red</item>
+        <item name="dangerButtonText">@color/light_red</item>
     </style>
 </resources>
