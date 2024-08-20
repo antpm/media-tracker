@@ -88,10 +88,7 @@ class HomeFragment : Fragment() {
                             Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
                             Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
                         }
-
-                        .setNegativeButton("Cancel"){dialog, which->
-
-                        }
+                        .setNegativeButton("Cancel"){ _, _ -> }
                     val dialog: AlertDialog = builder.create()
                     dialog.show()
                     true

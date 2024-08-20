@@ -74,6 +74,8 @@
     <string name="account_save">Save</string>
     <string name="account_cancel">Cancel</string>
     <string name="account_delete">Delete Account</string>
+    <string name="account_save_name">Save Name</string>
+    <string name="account_save_pass">Save Password</string>
 
     <string name="placeholder">placeholder</string>
     <!-- TODO: Remove or change this placeholder text -->

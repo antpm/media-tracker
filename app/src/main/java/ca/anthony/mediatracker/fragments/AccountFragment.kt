@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
+import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.databinding.FragmentAccountBinding
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
@@ -46,9 +47,41 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.AccountToolbar.setTitle("Account Management")
+        binding.AccountToolbar.setNavigationIcon(R.drawable.back_arrow)
+        binding.AccountToolbar.setNavigationOnClickListener {
+            Navigation.findNavController(it).popBackStack()
+        }
+        
+        
+
         auth = Firebase.auth
         val user: FirebaseUser = auth.currentUser!!
 
+        binding.AccountName.setText(user.displayName)
+        
+        
+        binding.AccountNameSave.setOnClickListener { 
+            saveName(user)
+        }
 
+
+    }
+    
+    private fun saveName(user: FirebaseUser){
+        if (binding.AccountName.text.isNotEmpty()){
+            val profile = userProfileChangeRequest {
+                displayName = binding.AccountName.text.toString()
+            }
+
+            user.updateProfile(profile).addOnCompleteListener { task->
+                if (task.isSuccessful){
+                    Toast.makeText(requireActivity(), "Display Name updated", Toast.LENGTH_SHORT).show()
+                } 
+            }
+        } else {
+            Toast.makeText(requireActivity(), "Display Name cannot be blank", Toast.LENGTH_SHORT).show()
+        }
+        
     }
 }
