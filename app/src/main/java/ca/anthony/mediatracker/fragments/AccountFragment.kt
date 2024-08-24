@@ -52,7 +52,30 @@ class AccountFragment : Fragment() {
         binding.AccountToolbar.setNavigationOnClickListener {
             Navigation.findNavController(it).popBackStack()
         }
-        
+
+        binding.AccountNameSubcardShow.setOnClickListener {
+            binding.AccountNameSubcard.visibility = View.VISIBLE
+            binding.AccountNameSubcardHide.visibility = View.VISIBLE
+            binding.AccountNameSubcardShow.visibility = View.INVISIBLE
+        }
+
+        binding.AccountNameSubcardHide.setOnClickListener {
+            binding.AccountNameSubcard.visibility = View.GONE
+            binding.AccountNameSubcardShow.visibility = View.VISIBLE
+            binding.AccountNameSubcardHide.visibility = View.INVISIBLE
+        }
+
+        binding.AccountPassSubcardShow.setOnClickListener {
+            binding.AccountPassSubcard.visibility = View.VISIBLE
+            binding.AccountPassSubcardHide.visibility = View.VISIBLE
+            binding.AccountPassSubcardShow.visibility = View.INVISIBLE
+        }
+
+        binding.AccountPassSubcardHide.setOnClickListener {
+            binding.AccountPassSubcard.visibility = View.GONE
+            binding.AccountPassSubcardShow.visibility = View.VISIBLE
+            binding.AccountPassSubcardHide.visibility = View.INVISIBLE
+        }
         
 
         auth = Firebase.auth

@@ -24,6 +24,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
 
+@Suppress("DEPRECATION")
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -46,16 +47,13 @@ class HomeFragment : Fragment() {
     private lateinit var gameAdapter: HomeGameAdapter
     private lateinit var bookAdapter: HomeBookAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
-        navBar.visibility = View.VISIBLE
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+        navBar = requireActivity().findViewById(R.id.BottomNav)
+        navBar.visibility = View.VISIBLE
         return view
 
     }
@@ -84,7 +82,7 @@ class HomeFragment : Fragment() {
                         .setTitle("Do you want to log out?")
                         .setPositiveButton("Confirm"){dialog, which ->
                             auth.signOut()
-                            navBar.visibility = View.INVISIBLE
+                            navBar.visibility = View.GONE
                             Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
                             Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
                         }
@@ -94,7 +92,7 @@ class HomeFragment : Fragment() {
                     true
                 }
                 R.id.account ->{
-                    navBar.visibility = View.INVISIBLE
+                    navBar.visibility = View.GONE
                     Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_account_fragment)
                     true
                 }
@@ -127,6 +125,7 @@ class HomeFragment : Fragment() {
                     gameAdapter = HomeGameAdapter(game, gameImage, id)
                     binding.HomeGameRecycler.layoutManager = LinearLayoutManager(context)
                     binding.HomeGameRecycler.adapter = gameAdapter
+                    binding.HomeGameRecycler.scheduleLayoutAnimation()
                 }
             }
         }
@@ -149,6 +148,7 @@ class HomeFragment : Fragment() {
                     bookAdapter = HomeBookAdapter(book, bookImage, id)
                     binding.HomeBookRecycler.layoutManager = LinearLayoutManager(context)
                     binding.HomeBookRecycler.adapter = bookAdapter
+                    binding.HomeBookRecycler.scheduleLayoutAnimation()
                 }
             }
         }

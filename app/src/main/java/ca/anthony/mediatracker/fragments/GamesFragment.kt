@@ -96,6 +96,7 @@ class GamesFragment : Fragment() {
 
             }
             gameAdapter.notifyDataSetChanged()
+            binding.GameRecycler.scheduleLayoutAnimation()
         }.addOnFailureListener { exception->
             Log.e("Firestore error", exception.message.toString())
         }
