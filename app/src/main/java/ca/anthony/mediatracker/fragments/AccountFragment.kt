@@ -83,28 +83,53 @@ class AccountFragment : Fragment() {
 
         binding.AccountName.setText(user.displayName)
         
-        
-        binding.AccountNameSave.setOnClickListener { 
-            saveName(user)
+        binding.AccountNameSave.setOnClickListener {
+            if (binding.AccountName.text.isNotEmpty()){
+                saveName(user)
+            } else {
+                Toast.makeText(requireActivity(), "Display Name cannot be blank", Toast.LENGTH_SHORT).show()
+            }
         }
 
-
+        binding.AccountPassSave.setOnClickListener {
+            if (binding.AccountNewPass.text.isNotEmpty() && binding.AccountOldPass.text.isNotEmpty()){
+                savePass(user)
+            } else {
+                Toast.makeText(requireActivity(), "Both password fields must be filled out", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
     
     private fun saveName(user: FirebaseUser){
-        if (binding.AccountName.text.isNotEmpty()){
-            val profile = userProfileChangeRequest {
-                displayName = binding.AccountName.text.toString()
-            }
-
-            user.updateProfile(profile).addOnCompleteListener { task->
-                if (task.isSuccessful){
-                    Toast.makeText(requireActivity(), "Display Name updated", Toast.LENGTH_SHORT).show()
-                } 
-            }
-        } else {
-            Toast.makeText(requireActivity(), "Display Name cannot be blank", Toast.LENGTH_SHORT).show()
+        val profile = userProfileChangeRequest {
+            displayName = binding.AccountName.text.toString()
         }
-        
+
+        user.updateProfile(profile).addOnCompleteListener { task->
+            if (task.isSuccessful){
+                Toast.makeText(requireActivity(), "Display Name updated", Toast.LENGTH_SHORT).show()
+                binding.AccountNameSubcardHide.performClick()
+            }
+        }
+    }
+
+    private fun savePass(user: FirebaseUser){
+        val credential = EmailAuthProvider.getCredential(user.email.toString(), binding.AccountOldPass.text.toString())
+        user.reauthenticate(credential).addOnCompleteListener { authTask->
+            if (authTask.isSuccessful){
+                user.updatePassword(binding.AccountNewPass.text.toString()).addOnCompleteListener {passTask->
+                    if (passTask.isSuccessful){
+                        Toast.makeText(requireActivity(), "Password Changed", Toast.LENGTH_SHORT).show()
+                        binding.AccountOldPass.text.clear()
+                        binding.AccountNewPass.text.clear()
+                        binding.AccountPassSubcardHide.performClick()
+                    } else {
+                        Toast.makeText(requireActivity(), "Password could not be changed", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(requireActivity(), "Email/Password Incorrect", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

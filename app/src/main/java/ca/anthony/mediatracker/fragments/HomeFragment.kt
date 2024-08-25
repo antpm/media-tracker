@@ -126,6 +126,7 @@ class HomeFragment : Fragment() {
                     binding.HomeGameRecycler.layoutManager = LinearLayoutManager(context)
                     binding.HomeGameRecycler.adapter = gameAdapter
                     binding.HomeGameRecycler.scheduleLayoutAnimation()
+                    binding.HomeGameLabel.visibility = View.VISIBLE
                 }
             }
         }
@@ -149,6 +150,7 @@ class HomeFragment : Fragment() {
                     binding.HomeBookRecycler.layoutManager = LinearLayoutManager(context)
                     binding.HomeBookRecycler.adapter = bookAdapter
                     binding.HomeBookRecycler.scheduleLayoutAnimation()
+                    binding.HomeBookLabel.visibility = View.VISIBLE
                 }
             }
         }
