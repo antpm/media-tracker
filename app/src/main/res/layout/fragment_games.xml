@@ -28,7 +28,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/GameSortCard"
-        tools:listitem="@layout/recycler_game_list" />
+        tools:listitem="@layout/recycler_game_list"
+        android:layoutAnimation="@anim/recycler_animation"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/GameAddButton"
@@ -97,7 +98,7 @@
                 android:id="@+id/GameSortSubCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/dark_grey"
+                android:backgroundTint="?attr/subCardBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

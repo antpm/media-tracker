@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_home_fragment_to_book_details_fragment"
             app:destination="@id/book_details_fragment" />
+        <action
+            android:id="@+id/action_home_fragment_to_account_fragment"
+            app:destination="@id/account_fragment" />
     </fragment>
     <fragment
         android:id="@+id/game_fragment"
@@ -99,5 +102,16 @@
         <action
             android:id="@+id/action_book_details_fragment_to_book_add_fragment"
             app:destination="@id/book_add_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/account_fragment"
+        android:name="ca.anthony.mediatracker.fragments.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_account_fragment_to_log_in"
+            app:destination="@id/log_in"
+            app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

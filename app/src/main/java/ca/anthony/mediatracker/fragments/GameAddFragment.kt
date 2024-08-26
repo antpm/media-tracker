@@ -47,14 +47,18 @@ class GameAddFragment : Fragment() {
     //values
     private var releaseDate: Long = 0
     private var completeDate:Long = 0
+    private var fileName:String = "noimage.jpg"
     private var image: Uri = Uri.EMPTY
     private var editing = false
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
-        val fileName = getFileNameFromUri(requireActivity(), it!!)
-        image = it
-        binding.GameAddImageName.text = image.lastPathSegment
+        if (it != null){
+            fileName = getFileNameFromUri(requireActivity(), it).toString()
+            image = it
+            binding.GameAddImageName.text = fileName
+        }
+
     }
 
 
@@ -169,9 +173,12 @@ class GameAddFragment : Fragment() {
     }
 
     private fun saveGame(view: View){
+        //TODO:this should be replaced with the filename variable
         var imageName = "noimage.jpg"
+
+
         if (editing) imageName = binding.GameAddImageName.text.toString()
-        if (image != Uri.EMPTY ) imageName = image.lastPathSegment.toString()
+        if (image != Uri.EMPTY ) imageName = fileName
         val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(), binding.GameAddPublisher.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
 
         //if editing, set over existing game
@@ -197,7 +204,7 @@ class GameAddFragment : Fragment() {
             db.collection("users").document(auth.currentUser!!.uid).collection("games").add(game).addOnSuccessListener {
                 Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
                 if (image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
+                    val imageRef = storage.child(fileName)
                     imageRef.putFile(image)
                 }
                 Navigation.findNavController(view).popBackStack()

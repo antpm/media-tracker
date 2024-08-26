@@ -1,6 +1,7 @@
 package ca.anthony.mediatracker.fragments
 
 import android.os.Bundle
+import android.telecom.QueryLocationException
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 
 
@@ -86,7 +88,7 @@ class GamesFragment : Fragment() {
 
     private fun loadGames(){
         gameList.clear()
-        val data = db.collection("users").document(auth.currentUser!!.uid).collection("games").orderBy("complete").get()
+        val data = db.collection("users").document(auth.currentUser!!.uid).collection("games").orderBy("complete", Query.Direction.DESCENDING).get()
 
         data.addOnSuccessListener {docs ->
             for (doc in docs){
@@ -96,6 +98,7 @@ class GamesFragment : Fragment() {
 
             }
             gameAdapter.notifyDataSetChanged()
+            binding.GameRecycler.scheduleLayoutAnimation()
         }.addOnFailureListener { exception->
             Log.e("Firestore error", exception.message.toString())
         }
