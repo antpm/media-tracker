@@ -40,8 +40,6 @@ class LogInFragment : Fragment() {
 
         auth = Firebase.auth
 
-        //val navBar = view.findViewById<BottomNavigationView>(R.id.BottomNav)
-        //navBar.visibility = View.GONE
 
         //check if the user is already logged in and navigate to home screen if so
         val currentUser = auth.currentUser
@@ -60,7 +58,7 @@ class LogInFragment : Fragment() {
                 auth.signInWithEmailAndPassword(binding.LogInEmail.text.toString(), binding.LogInPassword.text.toString())
                     .addOnCompleteListener { task->
                         if (task.isSuccessful){
-                            Toast.makeText(requireActivity(), "Login Succesful", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireActivity(), "Login Successful", Toast.LENGTH_SHORT).show()
                             Navigation.findNavController(view).navigate(R.id.action_log_in_to_home_fragment)
                         } else {
                             Toast.makeText(requireActivity(), "Email/Password Incorrect", Toast.LENGTH_SHORT).show()

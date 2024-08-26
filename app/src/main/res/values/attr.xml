@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="subCardBackground" format="reference" />
+    <attr name="dangerButtonBG" format="reference" />
+    <attr name="dangerButtonText" format="reference" />
+</resources>

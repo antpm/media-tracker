@@ -24,12 +24,15 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
 
+@Suppress("DEPRECATION")
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var auth: FirebaseAuth
+
+    private lateinit var navBar: BottomNavigationView
 
 
     private val db = Firebase.firestore
@@ -44,16 +47,13 @@ class HomeFragment : Fragment() {
     private lateinit var gameAdapter: HomeGameAdapter
     private lateinit var bookAdapter: HomeBookAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
-        navBar.visibility = View.VISIBLE
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+        navBar = requireActivity().findViewById(R.id.BottomNav)
+        navBar.visibility = View.VISIBLE
         return view
 
     }
@@ -82,21 +82,18 @@ class HomeFragment : Fragment() {
                         .setTitle("Do you want to log out?")
                         .setPositiveButton("Confirm"){dialog, which ->
                             auth.signOut()
-                            val navBar = requireActivity().findViewById<BottomNavigationView>(R.id.BottomNav)
-                            navBar.visibility = View.INVISIBLE
+                            navBar.visibility = View.GONE
                             Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
                             Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
                         }
-
-                        .setNegativeButton("Cancel"){dialog, which->
-
-                        }
+                        .setNegativeButton("Cancel"){ _, _ -> }
                     val dialog: AlertDialog = builder.create()
                     dialog.show()
                     true
                 }
                 R.id.account ->{
-                    //will do this later
+                    navBar.visibility = View.GONE
+                    Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_account_fragment)
                     true
                 }
                 else -> {
@@ -128,6 +125,8 @@ class HomeFragment : Fragment() {
                     gameAdapter = HomeGameAdapter(game, gameImage, id)
                     binding.HomeGameRecycler.layoutManager = LinearLayoutManager(context)
                     binding.HomeGameRecycler.adapter = gameAdapter
+                    binding.HomeGameRecycler.scheduleLayoutAnimation()
+                    binding.HomeGameLabel.visibility = View.VISIBLE
                 }
             }
         }
@@ -150,6 +149,8 @@ class HomeFragment : Fragment() {
                     bookAdapter = HomeBookAdapter(book, bookImage, id)
                     binding.HomeBookRecycler.layoutManager = LinearLayoutManager(context)
                     binding.HomeBookRecycler.adapter = bookAdapter
+                    binding.HomeBookRecycler.scheduleLayoutAnimation()
+                    binding.HomeBookLabel.visibility = View.VISIBLE
                 }
             }
         }

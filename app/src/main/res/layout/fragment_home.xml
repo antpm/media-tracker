@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment">
+    tools:context=".fragments.HomeFragment"
+    android:animateLayoutChanges="true">
 
     <ScrollView
         android:layout_width="0dp"
@@ -16,7 +17,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
 
 
             <TextView
@@ -32,13 +34,14 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/HomeGameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/game_latest"
                 android:textSize="16sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/HomeWelcome" />
 
@@ -49,20 +52,22 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layoutAnimation="@anim/recycler_animation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/HomeGameLabel"
                 tools:itemCount="1"
                 tools:listitem="@layout/recycler_home_latest_game" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/HomeBookLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/book_latest"
                 android:textSize="16sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/HomeGameRecycler" />
 
@@ -76,9 +81,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/HomeBookLabel"
                 tools:itemCount="1"
-                tools:listitem="@layout/recycler_home_latest_book" />
+                tools:listitem="@layout/recycler_home_latest_book"
+                android:layoutAnimation="@anim/recycler_animation"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

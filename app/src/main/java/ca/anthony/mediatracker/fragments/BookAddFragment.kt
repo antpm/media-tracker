@@ -50,14 +50,18 @@ class BookAddFragment : Fragment() {
     //values
     private var releaseDate: Long = 0
     private var completeDate:Long = 0
+    private var fileName: String = ""
     private var image: Uri = Uri.EMPTY
     private var editing = false
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
-        val fileName = getFileNameFromUri(requireActivity(), it!!)
-        image = it
-        binding.BookAddImageName.text = image.lastPathSegment
+        if (it != null){
+            fileName = getFileNameFromUri(requireActivity(), it).toString()
+            image = it
+            binding.BookAddImageName.text = fileName
+        }
+
     }
 
     override fun onCreateView(
@@ -160,9 +164,13 @@ class BookAddFragment : Fragment() {
     }
 
     private fun saveBook(view: View){
+        //TODO:this should be replaced with the filename variable
         var imageName = "noimage.jpg"
+
+
+
         if (editing) imageName = binding.BookAddImageName.text.toString()
-        if (image != Uri.EMPTY ) imageName = image.lastPathSegment.toString()
+        if (image != Uri.EMPTY ) imageName = fileName
         val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddPublisher.text.toString(), binding.BookAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
 
         //if editing, set over existing game
