@@ -34,7 +34,8 @@ class GamesFragment : Fragment() {
 
     private var gameList: ArrayList<Game> = arrayListOf()
     private var gameIDList: ArrayList<String> = arrayListOf()
-    private var gameAdapter = GameAdapter(gameList, gameIDList)
+    private var listMode: Int = 1
+    private var gameAdapter = GameAdapter(gameList, gameIDList, listMode)
 
 
     override fun onCreateView(
@@ -75,12 +76,34 @@ class GamesFragment : Fragment() {
         }
 
 
+        binding.GameAddButton.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_game_fragment_to_game_add_fragment)
+        }
+
         binding.GameRecycler.layoutManager = LinearLayoutManager(context)
         binding.GameRecycler.adapter = gameAdapter
 
+        binding.GameSortCompleteButton.isEnabled = false
 
-        binding.GameAddButton.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_game_fragment_to_game_add_fragment)
+        binding.GameSortCompleteButton.setOnClickListener {
+            sortGames(1)
+            binding.GameSortCompleteButton.isEnabled = false
+            binding.GameSortRatingButton.isEnabled = true
+            binding.GameSortReleaseButton.isEnabled = true
+        }
+
+        binding.GameSortReleaseButton.setOnClickListener {
+            sortGames(2)
+            binding.GameSortCompleteButton.isEnabled = true
+            binding.GameSortRatingButton.isEnabled = true
+            binding.GameSortReleaseButton.isEnabled = false
+        }
+
+        binding.GameSortRatingButton.setOnClickListener {
+            sortGames(3)
+            binding.GameSortCompleteButton.isEnabled = true
+            binding.GameSortRatingButton.isEnabled = false
+            binding.GameSortReleaseButton.isEnabled = true
         }
 
         loadGames()
@@ -102,5 +125,17 @@ class GamesFragment : Fragment() {
         }.addOnFailureListener { exception->
             Log.e("Firestore error", exception.message.toString())
         }
+    }
+
+    private fun sortGames(mode: Int){
+        when (mode){
+            1-> gameList.sortByDescending { it.complete }
+            2-> gameList.sortByDescending { it.release }
+            3-> gameList.sortByDescending { it.rating }
+        }
+
+        gameAdapter.changeMode(mode)
+        gameAdapter.notifyDataSetChanged()
+        binding.GameRecycler.scheduleLayoutAnimation()
     }
 }

@@ -14,7 +14,7 @@ import ca.anthony.mediatracker.models.Game
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList: ArrayList<String>): RecyclerView.Adapter<GameAdapter.ViewHolder>() {
+class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList: ArrayList<String>, private var mode:Int): RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
     //gets context for use in various methods
     private var context: Context? = null
@@ -35,14 +35,17 @@ class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList:
 
         //set simple text to fields
         holder.gameTitle.text = game.title
-        holder.gamePlatform.text = context?.getString(R.string.platform, game.platform)
 
-        //set rating field to the rating number string and insert rating number from game
-        holder.gameRating.text = context?.getString(R.string.rating, game.rating)
-
-        //convert date from long and format into string
+        //check mode and put appropriate data in text field
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-        holder.gameDate.text = context?.getString(R.string.complete_date, format.format(game.complete!!))
+        when (mode){
+            //mode 1: show completion date
+            1 -> holder.gameText.text = context?.getString(R.string.complete_date, format.format(game.complete!!))
+            //mode 2: show release date
+            2 -> holder.gameText.text = context?.getString(R.string.release_date, format.format(game.release!!))
+            //mode 3: show rating
+            3 -> holder.gameText.text = context?.getString(R.string.rating, game.rating)
+        }
 
         //set button listener
         holder.gameButton.setOnClickListener{
@@ -60,10 +63,12 @@ class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList:
 
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         val gameTitle: TextView = itemView.findViewById(R.id.GameTitle)
-        val gamePlatform: TextView = itemView.findViewById(R.id.GamePlatform)
-        val gameDate: TextView = itemView.findViewById(R.id.GameCompleteDate)
-        val gameRating: TextView = itemView.findViewById(R.id.GameRating)
+        val gameText: TextView = itemView.findViewById(R.id.GameText)
         val gameButton: Button = itemView.findViewById(R.id.GameListDetailButton)
+    }
+
+    fun changeMode(newMode: Int){
+        mode = newMode
     }
 
 }

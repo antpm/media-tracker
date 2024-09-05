@@ -36,6 +36,7 @@
     <string name="complete_date">Completion Date: %1$s</string>
     <string name="rating">Rating: %1$d/5</string>
     <string name="platform">Platform: %1$s</string>
+    <string name="details_button">View</string>
     <string name="game_details_button">View Game</string>
     <string name="book_details_button">View Book</string>
     <string name="genre">Genre: %1$s</string>
