@@ -179,7 +179,7 @@ class BookAddFragment : Fragment() {
                 Toast.makeText(context, "Book Updated", Toast.LENGTH_LONG).show()
                 //check if the image has been updated, if so upload new image and delete old image
                 if (book.image != oldImage && image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
+                    val imageRef = storage.child(fileName)
                     imageRef.child(oldImage).delete()
                     imageRef.putFile(image)
                 }
@@ -196,7 +196,7 @@ class BookAddFragment : Fragment() {
             db.collection("users").document(auth.currentUser!!.uid).collection("books").add(book).addOnSuccessListener {
                 Toast.makeText(context, "Book Added", Toast.LENGTH_LONG).show()
                 if (image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
+                    val imageRef = storage.child(fileName)
                     imageRef.putFile(image)
                 }
                 Navigation.findNavController(view).popBackStack()

@@ -173,7 +173,6 @@ class GameAddFragment : Fragment() {
     }
 
     private fun saveGame(view: View){
-        //TODO:this should be replaced with the filename variable
         var imageName = "noimage.jpg"
 
 
@@ -187,7 +186,7 @@ class GameAddFragment : Fragment() {
                 Toast.makeText(context, "Game Updated", Toast.LENGTH_LONG).show()
                 //check if the image has been updated, if so upload new image and delete old image
                 if (game.image != oldImage && image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
+                    val imageRef = storage.child(fileName)
                     imageRef.child(oldImage).delete()
                     imageRef.putFile(image)
                 }
