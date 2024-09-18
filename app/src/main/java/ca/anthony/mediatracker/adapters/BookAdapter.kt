@@ -1,15 +1,20 @@
 package ca.anthony.mediatracker.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
+import ca.anthony.mediatracker.fragments.BookDetailsFragment
 import ca.anthony.mediatracker.models.Book
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -40,9 +45,12 @@ class BookAdapter(private val bookList: ArrayList<Book>, private val bookIDList:
 
         holder.bookButton.setOnClickListener {
             val bundle = Bundle()
+            val dialog = BookDetailsFragment()
             bundle.putSerializable("book", book)
             bundle.putString("id", id)
-            Navigation.findNavController(holder.itemView).navigate(R.id.action_books_fragment_to_book_details_fragment, bundle)
+            dialog.arguments = bundle
+            dialog.show((holder.itemView.context as AppCompatActivity).supportFragmentManager, "dialog")
+            //Navigation.findNavController(holder.itemView).navigate(R.id.action_books_fragment_to_book_details_fragment, bundle)
         }
     }
 
@@ -55,7 +63,7 @@ class BookAdapter(private val bookList: ArrayList<Book>, private val bookIDList:
         val bookAuthor: TextView = itemView.findViewById(R.id.BookAuthor)
         val bookComplete: TextView = itemView.findViewById(R.id.BookComplete)
         val bookRating: TextView = itemView.findViewById(R.id.BookRating)
-        val bookButton: Button = itemView.findViewById(R.id.BookListDetailButton)
+        val bookButton: ImageButton = itemView.findViewById(R.id.BookListDetailsButton)
     }
 
 }

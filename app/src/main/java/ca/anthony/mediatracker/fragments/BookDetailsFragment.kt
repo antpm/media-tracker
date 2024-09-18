@@ -1,10 +1,15 @@
 package ca.anthony.mediatracker.fragments
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
@@ -20,7 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class BookDetailsFragment : Fragment() {
+class BookDetailsFragment : DialogFragment() {
 
     private var _binding: FragmentBookDetailsBinding? = null
     private val binding get() = _binding!!
@@ -30,6 +35,11 @@ class BookDetailsFragment : Fragment() {
     private lateinit var navBar: BottomNavigationView
 
     private val storage = Firebase.storage.reference.child("images/books")
+
+    override fun onStart() {
+        super.onStart()
+        dialog!!.window!!.setLayout(MATCH_PARENT, WRAP_CONTENT)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,16 +72,17 @@ class BookDetailsFragment : Fragment() {
         id = arguments?.getString("id") as String
         binding.BookDetailCloseButton.setOnClickListener {
 
-            Navigation.findNavController(view).popBackStack()
+            dialog!!.dismiss()
+            //Navigation.findNavController(view).popBackStack()
         }
 
 
-        binding.BookDetailEditButton.setOnClickListener {
+       /* binding.BookDetailEditButton.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("book", book)
             bundle.putString("id", id)
             Navigation.findNavController(it).navigate(R.id.action_book_details_fragment_to_book_add_fragment, bundle)
-        }
+        } */
 
         setDetails()
     }
@@ -98,14 +109,12 @@ class BookDetailsFragment : Fragment() {
         //set release date and complete date
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
-        binding.BookDetailReleaseDate.text = requireActivity().getString(R.string.release_date, format.format(book.release!!))
         binding.BookDetailCompleteDate.text = requireActivity().getString(R.string.complete_date, format.format(book.complete!!))
 
         //set dev
         binding.BookDetailAuthor.text = book.author
 
         //set pub
-        binding.BookDetailPublisher.text =requireActivity().getString(R.string.publisher, book.publisher)
 
         //set genre
         binding.BookDetailGenre.text = requireActivity().getString(R.string.genre, book.genre)
