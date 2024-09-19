@@ -36,17 +36,6 @@ class GamesFragment : Fragment() {
     private var listMode: Int = 1
     private var gameAdapter = GameAdapter(gameList, listMode)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(null)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //resets the list to it's default state when navigating back to the fragment
-        Log.d("GameListLoad", "ListMode: $listMode")
-        sortGames()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,7 +43,6 @@ class GamesFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentGamesBinding.inflate(inflater,container, false)
         val view = binding.root
-
         return view
     }
 
@@ -64,7 +52,7 @@ class GamesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, null)
+        super.onViewCreated(view, savedInstanceState)
 
         auth = Firebase.auth
 
@@ -90,12 +78,10 @@ class GamesFragment : Fragment() {
                 sortGames()
             }
         }
-        Log.d("GameListLoad", "OnViewCreated finished")
         loadGames()
     }
 
     private fun resetList() {
-        Log.d("GameListLoad", "Reset List called")
         listMode = 1
         binding.GameSortButtonGroup.check(R.id.GameSortCompleteButton)
     }
@@ -112,9 +98,8 @@ class GamesFragment : Fragment() {
 
 
             }
-            gameAdapter.notifyDataSetChanged()
-            binding.GameRecycler.scheduleLayoutAnimation()
-            //binding.GameSortButtonGroup.check(R.id.GameSortCompleteButton)
+            //this call to sortGames allows the state of the fragment to properly be maintained when navigating back from another fragment
+            sortGames()
         }.addOnFailureListener { exception->
             Log.e("Firestore error", exception.message.toString())
         }

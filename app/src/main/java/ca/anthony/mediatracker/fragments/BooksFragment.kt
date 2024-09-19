@@ -20,11 +20,12 @@ import com.google.firebase.firestore.firestore
 
 
 class BooksFragment : Fragment() {
-    private var _binding: FragmentBooksBinding? = null
-    private val binding get() = _binding!!
 
     private val db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
+
+    private var _binding: FragmentBooksBinding? = null
+    private val binding get() = _binding!!
 
     private var bookList: ArrayList<Book> = arrayListOf()
     private var listMode: Int = 1
@@ -86,8 +87,7 @@ class BooksFragment : Fragment() {
                 bookList.add(book)
 
             }
-            bookAdapter.notifyDataSetChanged()
-            binding.BooksRecycler.scheduleLayoutAnimation()
+            sortBooks()
         }.addOnFailureListener { exception->
             Log.e("Firestore error", exception.message.toString())
         }
