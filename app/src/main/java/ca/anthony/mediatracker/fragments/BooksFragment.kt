@@ -28,7 +28,8 @@ class BooksFragment : Fragment() {
 
     private var bookList: ArrayList<Book> = arrayListOf()
     private var bookIDList: ArrayList<String> = arrayListOf()
-    private var bookAdapter = BookAdapter(bookList, bookIDList)
+    private var listMode: Int = 1
+    private var bookAdapter = BookAdapter(bookList, bookIDList, listMode)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,24 +51,27 @@ class BooksFragment : Fragment() {
 
         auth = Firebase.auth
 
-        binding.BookSortSubCard.visibility = View.GONE
-        binding.BookSortOptionsOpen.setOnClickListener {
-            binding.BookSortSubCard.visibility = View.VISIBLE
-            binding.BookSortOptionsOpen.visibility = View.INVISIBLE
-            binding.BookSortOptionsClose.visibility = View.VISIBLE
-        }
-
-        binding.BookSortOptionsClose.setOnClickListener {
-            binding.BookSortSubCard.visibility = View.GONE
-            binding.BookSortOptionsOpen.visibility = View.VISIBLE
-            binding.BookSortOptionsClose.visibility = View.INVISIBLE
+        binding.BooksAddButton.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_books_fragment_to_book_add_fragment)
         }
 
         binding.BooksRecycler.layoutManager = LinearLayoutManager(context)
         binding.BooksRecycler.adapter = bookAdapter
 
-        binding.BooksAddButton.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_books_fragment_to_book_add_fragment)
+
+        binding.BookSortCompleteButton.setOnClickListener {
+            if (listMode != 1) {
+                listMode = 1
+                sortBooks()
+            }
+        }
+
+
+        binding.BookSortRatingButton.setOnClickListener {
+            if (listMode != 2) {
+                listMode = 2
+                sortBooks()
+            }
         }
 
         loadBooks()
@@ -85,8 +89,21 @@ class BooksFragment : Fragment() {
 
             }
             bookAdapter.notifyDataSetChanged()
+            binding.BooksRecycler.scheduleLayoutAnimation()
         }.addOnFailureListener { exception->
             Log.e("Firestore error", exception.message.toString())
         }
+    }
+
+    private fun sortBooks(){
+        when (listMode){
+            1-> bookList.sortByDescending { it.complete }
+            2-> bookList.sortByDescending { it.rating }
+        }
+
+
+        bookAdapter.changeMode(listMode)
+        bookAdapter.notifyDataSetChanged()
+        binding.BooksRecycler.scheduleLayoutAnimation()
     }
 }

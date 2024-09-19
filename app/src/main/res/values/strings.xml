@@ -31,7 +31,7 @@
     <string name="sort_options">Sorting Options</string>
     <string name="sort">Sort By:</string>
     <string name="sort_release">Release Date</string>
-    <string name="sort_complete">Completion Date</string>
+    <string name="sort_complete">Completion</string>
     <string name="sort_rating">Rating</string>
     <string name="complete_date">Completion Date: %1$s</string>
     <string name="rating">Rating: %1$d/5</string>

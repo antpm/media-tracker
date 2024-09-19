@@ -41,10 +41,9 @@ class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList:
         when (mode){
             //mode 1: show completion date
             1 -> holder.gameText.text = context?.getString(R.string.complete_date, format.format(game.complete!!))
-            //mode 2: show release date
-            2 -> holder.gameText.text = context?.getString(R.string.release_date, format.format(game.release!!))
+
             //mode 3: show rating
-            3 -> holder.gameText.text = context?.getString(R.string.rating, game.rating)
+            2 -> holder.gameText.text = context?.getString(R.string.rating, game.rating)
         }
 
         //set button listener

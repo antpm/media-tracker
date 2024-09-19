@@ -59,17 +59,14 @@ class GamesFragment : Fragment() {
         auth = Firebase.auth
 
 
-        //binding.GameTestText.visibility = View.GONE
         binding.GameSortSubCard.visibility = View.GONE
         binding.GameSortOptionsOpen.setOnClickListener {
-            //binding.GameTestText.visibility = View.VISIBLE
             binding.GameSortSubCard.visibility = View.VISIBLE
             binding.GameSortOptionsOpen.visibility = View.INVISIBLE
             binding.GameSortOptionsClose.visibility = View.VISIBLE
         }
 
         binding.GameSortOptionsClose.setOnClickListener {
-            //binding.GameTestText.visibility = View.GONE
             binding.GameSortSubCard.visibility = View.GONE
             binding.GameSortOptionsOpen.visibility = View.VISIBLE
             binding.GameSortOptionsClose.visibility = View.INVISIBLE
@@ -86,24 +83,22 @@ class GamesFragment : Fragment() {
         binding.GameSortCompleteButton.isEnabled = false
 
         binding.GameSortCompleteButton.setOnClickListener {
-            sortGames(1)
-            binding.GameSortCompleteButton.isEnabled = false
-            binding.GameSortRatingButton.isEnabled = true
-            binding.GameSortReleaseButton.isEnabled = true
+            if (listMode != 1) {
+                listMode = 1
+                sortGames()
+            }
+
+
         }
 
-        binding.GameSortReleaseButton.setOnClickListener {
-            sortGames(2)
-            binding.GameSortCompleteButton.isEnabled = true
-            binding.GameSortRatingButton.isEnabled = true
-            binding.GameSortReleaseButton.isEnabled = false
-        }
 
         binding.GameSortRatingButton.setOnClickListener {
-            sortGames(3)
-            binding.GameSortCompleteButton.isEnabled = true
-            binding.GameSortRatingButton.isEnabled = false
-            binding.GameSortReleaseButton.isEnabled = true
+            if (listMode != 2) {
+                listMode = 2
+                sortGames()
+            }
+
+
         }
 
         loadGames()
@@ -127,14 +122,13 @@ class GamesFragment : Fragment() {
         }
     }
 
-    private fun sortGames(mode: Int){
-        when (mode){
+    private fun sortGames(){
+        when (listMode){
             1-> gameList.sortByDescending { it.complete }
-            2-> gameList.sortByDescending { it.release }
-            3-> gameList.sortByDescending { it.rating }
+            2-> gameList.sortByDescending { it.rating }
         }
 
-        gameAdapter.changeMode(mode)
+        gameAdapter.changeMode(listMode)
         gameAdapter.notifyDataSetChanged()
         binding.GameRecycler.scheduleLayoutAnimation()
     }
