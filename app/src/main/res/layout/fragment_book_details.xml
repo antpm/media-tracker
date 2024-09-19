@@ -32,6 +32,7 @@
         android:id="@+id/BookDetailRating"
         android:layout_width="214dp"
         android:layout_height="36dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/star1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -86,7 +86,7 @@ class BookAddFragment : Fragment() {
 
         if (arguments != null){
             editBook = arguments?.getSerializable("book") as Book
-            editID = arguments?.getString("id") as String
+            editID = editBook.id.toString()
             enableEditing(editBook)
         }
 

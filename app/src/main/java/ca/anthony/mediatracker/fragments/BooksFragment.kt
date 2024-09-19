@@ -27,9 +27,8 @@ class BooksFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
 
     private var bookList: ArrayList<Book> = arrayListOf()
-    private var bookIDList: ArrayList<String> = arrayListOf()
     private var listMode: Int = 1
-    private var bookAdapter = BookAdapter(bookList, bookIDList, listMode)
+    private var bookAdapter = BookAdapter(bookList, listMode)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +82,7 @@ class BooksFragment : Fragment() {
         data.addOnSuccessListener {docs ->
             for (doc in docs){
                 val book = doc.toObject(Book::class.java)
-                bookIDList.add(doc.id)
+                book.id = doc.id
                 bookList.add(book)
 
             }

@@ -5,19 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import ca.anthony.mediatracker.R
+import ca.anthony.mediatracker.fragments.GameDetailsFragment
 import ca.anthony.mediatracker.models.Game
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList: ArrayList<String>, private var mode:Int): RecyclerView.Adapter<GameAdapter.ViewHolder>() {
+class GameAdapter(private val gameList: ArrayList<Game>, private var mode:Int): RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
     //gets context for use in various methods
     private var context: Context? = null
+
+    private var onClickListener: OnClickListener? = null
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
@@ -31,7 +35,6 @@ class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList:
     override fun onBindViewHolder(holder: GameAdapter.ViewHolder, position: Int) {
         //get game from list
         val game = gameList[position]
-        val id = gameIDList[position]
 
         //set simple text to fields
         holder.gameTitle.text = game.title
@@ -42,19 +45,34 @@ class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList:
             //mode 1: show completion date
             1 -> holder.gameText.text = context?.getString(R.string.complete_date, format.format(game.complete!!))
 
-            //mode 3: show rating
+            //mode 2: show rating
             2 -> holder.gameText.text = context?.getString(R.string.rating, game.rating)
         }
 
         //set button listener
-        holder.gameButton.setOnClickListener{
+        holder.itemView.setOnClickListener {
+            val bundle = Bundle()
+            val dialog = GameDetailsFragment()
+            bundle.putSerializable("game", game)
+            dialog.arguments = bundle
+            dialog.show((holder.itemView.context as AppCompatActivity).supportFragmentManager, "dialog")
+        }
+
+        holder.gameEditButton.setOnClickListener {
+
             val bundle = Bundle()
             bundle.putSerializable("game", game)
-            bundle.putString("id", id)
-            Navigation.findNavController(holder.itemView).navigate(R.id.action_game_fragment_to_game_detail_fragment, bundle)
-
+            Navigation.findNavController(it).navigate(R.id.action_game_fragment_to_game_add_fragment, bundle)
         }
     }
+
+    // Set the click listener for the adapter
+    fun setOnClickListener(listener: OnClickListener?) {
+        this.onClickListener = listener
+    }
+
+    // Interface for the click listener
+    interface OnClickListener
 
     override fun getItemCount(): Int {
         return gameList.size
@@ -63,7 +81,7 @@ class GameAdapter(private val gameList: ArrayList<Game>, private val gameIDList:
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         val gameTitle: TextView = itemView.findViewById(R.id.GameTitle)
         val gameText: TextView = itemView.findViewById(R.id.GameText)
-        val gameButton: Button = itemView.findViewById(R.id.GameListDetailButton)
+        val gameEditButton: ImageButton = itemView.findViewById(R.id.GameListEditButton)
     }
 
     fun changeMode(newMode: Int){

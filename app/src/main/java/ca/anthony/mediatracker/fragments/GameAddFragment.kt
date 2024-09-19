@@ -84,7 +84,7 @@ class GameAddFragment : Fragment() {
 
         if (arguments != null){
             editGame = arguments?.getSerializable("game") as Game
-            editID = arguments?.getString("id") as String
+            editID = editGame.id.toString()
             enableEditing(editGame)
         }
 

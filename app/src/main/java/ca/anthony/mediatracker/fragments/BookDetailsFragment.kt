@@ -24,7 +24,6 @@ import com.google.firebase.storage.storage
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 class BookDetailsFragment : DialogFragment() {
 
     private var _binding: FragmentBookDetailsBinding? = null
@@ -32,7 +31,6 @@ class BookDetailsFragment : DialogFragment() {
 
     private var book = Book()
     private var id = ""
-    private lateinit var navBar: BottomNavigationView
 
     private val storage = Firebase.storage.reference.child("images/books")
 
@@ -70,19 +68,10 @@ class BookDetailsFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         book = arguments?.getSerializable("book") as Book
         id = arguments?.getString("id") as String
+
         binding.BookDetailCloseButton.setOnClickListener {
-
             dialog!!.dismiss()
-            //Navigation.findNavController(view).popBackStack()
         }
-
-
-       /* binding.BookDetailEditButton.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putSerializable("book", book)
-            bundle.putString("id", id)
-            Navigation.findNavController(it).navigate(R.id.action_book_details_fragment_to_book_add_fragment, bundle)
-        } */
 
         setDetails()
     }

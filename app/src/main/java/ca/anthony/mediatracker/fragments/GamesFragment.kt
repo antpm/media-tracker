@@ -33,10 +33,19 @@ class GamesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var gameList: ArrayList<Game> = arrayListOf()
-    private var gameIDList: ArrayList<String> = arrayListOf()
     private var listMode: Int = 1
-    private var gameAdapter = GameAdapter(gameList, gameIDList, listMode)
+    private var gameAdapter = GameAdapter(gameList, listMode)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //resets the list to it's default state when navigating back to the fragment
+        Log.d("GameListLoad", "ListMode: $listMode")
+        sortGames()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +54,7 @@ class GamesFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentGamesBinding.inflate(inflater,container, false)
         val view = binding.root
+
         return view
     }
 
@@ -54,13 +64,14 @@ class GamesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(view, null)
 
         auth = Firebase.auth
 
         binding.GameAddButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_game_fragment_to_game_add_fragment)
         }
+
 
         binding.GameRecycler.layoutManager = LinearLayoutManager(context)
         binding.GameRecycler.adapter = gameAdapter
@@ -79,8 +90,14 @@ class GamesFragment : Fragment() {
                 sortGames()
             }
         }
-
+        Log.d("GameListLoad", "OnViewCreated finished")
         loadGames()
+    }
+
+    private fun resetList() {
+        Log.d("GameListLoad", "Reset List called")
+        listMode = 1
+        binding.GameSortButtonGroup.check(R.id.GameSortCompleteButton)
     }
 
     private fun loadGames(){
@@ -90,12 +107,14 @@ class GamesFragment : Fragment() {
         data.addOnSuccessListener {docs ->
             for (doc in docs){
                 val game = doc.toObject(Game::class.java)
-                gameIDList.add(doc.id)
+                game.id = doc.id
                 gameList.add(game)
+
 
             }
             gameAdapter.notifyDataSetChanged()
             binding.GameRecycler.scheduleLayoutAnimation()
+            //binding.GameSortButtonGroup.check(R.id.GameSortCompleteButton)
         }.addOnFailureListener { exception->
             Log.e("Firestore error", exception.message.toString())
         }

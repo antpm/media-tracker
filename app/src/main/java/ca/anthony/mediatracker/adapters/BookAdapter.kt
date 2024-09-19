@@ -16,7 +16,7 @@ import ca.anthony.mediatracker.models.Book
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class BookAdapter(private val bookList: ArrayList<Book>, private val bookIDList: ArrayList<String>, private var mode:Int):RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+class BookAdapter(private val bookList: ArrayList<Book>, private var mode:Int):RecyclerView.Adapter<BookAdapter.ViewHolder>() {
 
     //gets context for use in various methods
     private var context: Context? = null
@@ -33,7 +33,6 @@ class BookAdapter(private val bookList: ArrayList<Book>, private val bookIDList:
 
     override fun onBindViewHolder(holder: BookAdapter.ViewHolder, position: Int) {
         val book = bookList[position]
-        val id = bookIDList[position]
 
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
@@ -47,21 +46,17 @@ class BookAdapter(private val bookList: ArrayList<Book>, private val bookIDList:
         }
         //holder.bookRating.text = context?.getString(R.string.rating, book.rating)
 
+        val bundle = Bundle()
+        bundle.putSerializable("book", book)
+
         holder.itemView.setOnClickListener {
-            //onClickListener?.onClick(position, book)
-            val bundle = Bundle()
             val dialog = BookDetailsFragment()
-            bundle.putSerializable("book", book)
-            bundle.putString("id", id)
             dialog.arguments = bundle
             dialog.show((holder.itemView.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
 
         holder.bookEditButton.setOnClickListener {
 
-            val bundle = Bundle()
-            bundle.putSerializable("book", book)
-            bundle.putString("id", id)
             Navigation.findNavController(it).navigate(R.id.action_books_fragment_to_book_add_fragment, bundle)
         }
     }
