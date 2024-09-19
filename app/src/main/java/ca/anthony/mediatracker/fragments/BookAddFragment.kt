@@ -48,7 +48,6 @@ class BookAddFragment : Fragment() {
     private var oldImage = ""
 
     //values
-    private var releaseDate: Long = 0
     private var completeDate:Long = 0
     private var fileName: String = ""
     private var image: Uri = Uri.EMPTY
@@ -90,10 +89,6 @@ class BookAddFragment : Fragment() {
             enableEditing(editBook)
         }
 
-        binding.BookAddReleaseDate.setOnClickListener {
-            showDatePicker(binding.BookAddReleaseDate)
-        }
-
         binding.BookAddCompDate.setOnClickListener {
             showDatePicker(binding.BookAddCompDate)
         }
@@ -124,14 +119,10 @@ class BookAddFragment : Fragment() {
             val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
             val date = dateFormatter.format(Date(myTimeZoneDate.toInstant().toEpochMilli()))
 
-            //set values based on textfield that was clicked
-            if (textField == binding.BookAddReleaseDate){
-                releaseDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.BookAddReleaseDate.setText(date)
-            } else if (textField == binding.BookAddCompDate){
-                completeDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.BookAddCompDate.setText(date)
-            }
+            //set values
+            completeDate = myTimeZoneDate.toInstant().toEpochMilli()
+            binding.BookAddCompDate.setText(date)
+
         }
     }
 
@@ -150,12 +141,9 @@ class BookAddFragment : Fragment() {
         //set values in fields
         binding.BookAddTitle.setText(editBook.title)
         binding.BookAddAuthor.setText(editBook.author)
-        binding.BookAddPublisher.setText(editBook.publisher)
         binding.BookAddGenre.setText(editBook.genre)
         binding.BookAddRating.setText(editBook.rating.toString())
-        val rDate = dateFormatter.format(Date(editBook.release!!.toInstant().toEpochMilli()))
-        releaseDate = editBook.release!!.toInstant().toEpochMilli()
-        binding.BookAddReleaseDate.setText(rDate)
+
         val cDate = dateFormatter.format(Date(editBook.complete!!.toInstant().toEpochMilli()))
         completeDate = editBook.complete!!.toInstant().toEpochMilli()
         binding.BookAddCompDate.setText(cDate)
@@ -171,7 +159,7 @@ class BookAddFragment : Fragment() {
 
         if (editing) imageName = binding.BookAddImageName.text.toString()
         if (image != Uri.EMPTY ) imageName = fileName
-        val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddPublisher.text.toString(), binding.BookAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
+        val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddRating.text.toString().toInt(), Date(completeDate), imageName)
 
         //if editing, set over existing game
         if (editing){
@@ -231,7 +219,7 @@ class BookAddFragment : Fragment() {
     }
 
     private fun checkBlank(): Boolean{
-        return (binding.BookAddTitle.text.isEmpty() || binding.BookAddAuthor.text.isEmpty() || binding.BookAddPublisher.text.isEmpty() || binding.BookAddGenre.text.isEmpty() || binding.BookAddRating.text.isEmpty() || binding.BookAddReleaseDate.text.isEmpty() || binding.BookAddCompDate.text.isEmpty())
+        return (binding.BookAddTitle.text.isEmpty() || binding.BookAddAuthor.text.isEmpty() || binding.BookAddGenre.text.isEmpty() || binding.BookAddRating.text.isEmpty() || binding.BookAddCompDate.text.isEmpty())
 
     }
 

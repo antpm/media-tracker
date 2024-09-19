@@ -26,8 +26,11 @@ import com.google.firebase.firestore.firestore
 
 class GamesFragment : Fragment() {
 
+    private var reloaded = false
+
     private val db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
+
 
     private var _binding: FragmentGamesBinding? = null
     private val binding get() = _binding!!
@@ -46,6 +49,16 @@ class GamesFragment : Fragment() {
         return view
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("Games onCreate", "Reloaded: $reloaded")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Games onResume", "Reloaded: $reloaded")
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -53,6 +66,8 @@ class GamesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d("Game onViewCreated", "Reloaded: $reloaded")
 
         auth = Firebase.auth
 
@@ -79,6 +94,7 @@ class GamesFragment : Fragment() {
             }
         }
         loadGames()
+        reloaded = true
     }
 
     private fun resetList() {
@@ -87,6 +103,7 @@ class GamesFragment : Fragment() {
     }
 
     private fun loadGames(){
+        Log.d("game loadGames", "Reloaded; $reloaded")
         gameList.clear()
         val data = db.collection("users").document(auth.currentUser!!.uid).collection("games").orderBy("complete", Query.Direction.DESCENDING).get()
 
@@ -113,6 +130,10 @@ class GamesFragment : Fragment() {
 
         gameAdapter.changeMode(listMode)
         gameAdapter.notifyDataSetChanged()
-        binding.GameRecycler.scheduleLayoutAnimation()
+        //rare instance of a crash that I believe was called by this method being called from loadGames after having navigating away from fragment, so this check should prevent that
+        if (_binding != null){
+            binding.GameRecycler.scheduleLayoutAnimation()
+        }
+
     }
 }

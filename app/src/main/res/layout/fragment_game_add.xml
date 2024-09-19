@@ -60,16 +60,6 @@
                 app:layout_constraintGuide_begin="143dp" />
 
             <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/add_publisher"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-            <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,7 +67,7 @@
                 android:text="@string/add_platform"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -100,16 +90,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
             <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/add_release_date"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-            <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -117,7 +97,7 @@
                 android:text="@string/add_comp_date"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -148,15 +128,6 @@
                 app:layout_constraintStart_toEndOf="@+id/textView5" />
 
             <EditText
-                android:id="@+id/GameAddPublisher"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:ems="10"
-                android:inputType="text"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
-                app:layout_constraintStart_toStartOf="@+id/guideline" />
-
-            <EditText
                 android:id="@+id/GameAddPlatform"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
@@ -182,16 +153,6 @@
                 android:inputType="number"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
                 app:layout_constraintStart_toStartOf="@+id/guideline" />
-
-            <EditText
-                android:id="@+id/GameAddReleaseDate"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:ems="10"
-                android:inputType="date"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView10"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                android:focusable="false"/>
 
             <EditText
                 android:id="@+id/GameAddCompDate"

@@ -63,7 +63,6 @@ class GameDetailsFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         game = arguments?.getSerializable("game") as Game
-        id = arguments?.getString("id") as String
 
         binding.GameDetailCloseButton.setOnClickListener {
 

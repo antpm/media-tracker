@@ -45,7 +45,6 @@ class GameAddFragment : Fragment() {
     private var oldImage = ""
 
     //values
-    private var releaseDate: Long = 0
     private var completeDate:Long = 0
     private var fileName:String = "noimage.jpg"
     private var image: Uri = Uri.EMPTY
@@ -88,10 +87,6 @@ class GameAddFragment : Fragment() {
             enableEditing(editGame)
         }
 
-        binding.GameAddReleaseDate.setOnClickListener {
-            showDatePicker(binding.GameAddReleaseDate)
-        }
-
         binding.GameAddCompDate.setOnClickListener {
             showDatePicker(binding.GameAddCompDate)
         }
@@ -124,13 +119,10 @@ class GameAddFragment : Fragment() {
         //set values in fields
         binding.GameAddTitle.setText(editGame.title)
         binding.GameAddDev.setText(editGame.developer)
-        binding.GameAddPublisher.setText(editGame.publisher)
         binding.GameAddPlatform.setText(editGame.platform)
         binding.GameAddGenre.setText(editGame.genre)
         binding.GameAddRating.setText(editGame.rating.toString())
-        val rDate = dateFormatter.format(Date(editGame.release!!.toInstant().toEpochMilli()))
-        releaseDate = editGame.release!!.toInstant().toEpochMilli()
-        binding.GameAddReleaseDate.setText(rDate)
+
         val cDate = dateFormatter.format(Date(editGame.complete!!.toInstant().toEpochMilli()))
         completeDate = editGame.complete!!.toInstant().toEpochMilli()
         binding.GameAddCompDate.setText(cDate)
@@ -151,14 +143,10 @@ class GameAddFragment : Fragment() {
             val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
             val date = dateFormatter.format(Date(myTimeZoneDate.toInstant().toEpochMilli()))
 
-            //set values based on textfield that was clicked
-            if (textField == binding.GameAddReleaseDate){
-                releaseDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.GameAddReleaseDate.setText(date)
-            } else if (textField == binding.GameAddCompDate){
-                completeDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.GameAddCompDate.setText(date)
-            }
+            //set values
+            completeDate = myTimeZoneDate.toInstant().toEpochMilli()
+            binding.GameAddCompDate.setText(date)
+
         }
     }
 
@@ -178,7 +166,7 @@ class GameAddFragment : Fragment() {
 
         if (editing) imageName = binding.GameAddImageName.text.toString()
         if (image != Uri.EMPTY ) imageName = fileName
-        val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(), binding.GameAddPublisher.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
+        val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.text.toString().toInt(), Date(completeDate), imageName)
 
         //if editing, set over existing game
         if (editing){
@@ -228,7 +216,7 @@ class GameAddFragment : Fragment() {
     }
 
     private fun checkBlank(): Boolean{
-        return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPublisher.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.text.isEmpty() || binding.GameAddReleaseDate.text.isEmpty() || binding.GameAddCompDate.text.isEmpty())
+        return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.text.isEmpty() || binding.GameAddCompDate.text.isEmpty())
 
     }
 }

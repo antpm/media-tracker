@@ -102,6 +102,10 @@ class BooksFragment : Fragment() {
 
         bookAdapter.changeMode(listMode)
         bookAdapter.notifyDataSetChanged()
-        binding.BooksRecycler.scheduleLayoutAnimation()
+        //rare instance of a crash that I believe was called by this method being called from loadGames after having navigating away from fragment, so this check should prevent that
+        if (_binding != null){
+            binding.BooksRecycler.scheduleLayoutAnimation()
+
+        }
     }
 }
