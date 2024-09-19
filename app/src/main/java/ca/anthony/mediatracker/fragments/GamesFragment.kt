@@ -58,21 +58,6 @@ class GamesFragment : Fragment() {
 
         auth = Firebase.auth
 
-
-        binding.GameSortSubCard.visibility = View.GONE
-        binding.GameSortOptionsOpen.setOnClickListener {
-            binding.GameSortSubCard.visibility = View.VISIBLE
-            binding.GameSortOptionsOpen.visibility = View.INVISIBLE
-            binding.GameSortOptionsClose.visibility = View.VISIBLE
-        }
-
-        binding.GameSortOptionsClose.setOnClickListener {
-            binding.GameSortSubCard.visibility = View.GONE
-            binding.GameSortOptionsOpen.visibility = View.VISIBLE
-            binding.GameSortOptionsClose.visibility = View.INVISIBLE
-        }
-
-
         binding.GameAddButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_game_fragment_to_game_add_fragment)
         }
@@ -80,15 +65,11 @@ class GamesFragment : Fragment() {
         binding.GameRecycler.layoutManager = LinearLayoutManager(context)
         binding.GameRecycler.adapter = gameAdapter
 
-        binding.GameSortCompleteButton.isEnabled = false
-
         binding.GameSortCompleteButton.setOnClickListener {
             if (listMode != 1) {
                 listMode = 1
                 sortGames()
             }
-
-
         }
 
 
@@ -97,8 +78,6 @@ class GamesFragment : Fragment() {
                 listMode = 2
                 sortGames()
             }
-
-
         }
 
         loadGames()

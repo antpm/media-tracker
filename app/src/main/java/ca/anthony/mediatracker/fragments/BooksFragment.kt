@@ -58,7 +58,6 @@ class BooksFragment : Fragment() {
         binding.BooksRecycler.layoutManager = LinearLayoutManager(context)
         binding.BooksRecycler.adapter = bookAdapter
 
-
         binding.BookSortCompleteButton.setOnClickListener {
             if (listMode != 1) {
                 listMode = 1
