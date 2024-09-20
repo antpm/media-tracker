@@ -25,9 +25,9 @@ class HomeBookAdapter(private val book: Book, private val image: Uri, private va
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeBookAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recycler_home_latest_book, parent, false)
-        return HomeBookAdapter.ViewHolder(itemView)
+        return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: HomeBookAdapter.ViewHolder, position: Int) {
@@ -54,6 +54,7 @@ class HomeBookAdapter(private val book: Book, private val image: Uri, private va
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
         val bookImage: ImageView = itemView.findViewById(R.id.HomeBookImage)
         val bookTitle: TextView = itemView.findViewById(R.id.HomeBookTitle)
         val bookAuthor: TextView = itemView.findViewById(R.id.HomeBookAuthor)
@@ -61,4 +62,5 @@ class HomeBookAdapter(private val book: Book, private val image: Uri, private va
         val bookComplete: TextView = itemView.findViewById(R.id.HomeBookCompleteDate)
         val bookDetailsButton: Button = itemView.findViewById(R.id.HomeBookDetailsButton)
     }
+
 }

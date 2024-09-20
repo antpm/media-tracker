@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,7 +37,7 @@ import java.util.Date
 import java.util.Locale
 
 
-class BookAddFragment : Fragment() {
+class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentBookAddBinding? = null
     private val binding get() = _binding!!
@@ -52,6 +54,7 @@ class BookAddFragment : Fragment() {
     private var fileName: String = ""
     private var image: Uri = Uri.EMPTY
     private var editing = false
+    private val ratingList: Array<Int> = arrayOf(1,2,3,4,5)
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
@@ -82,6 +85,11 @@ class BookAddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = Firebase.auth
+
+        binding.BookAddRating.onItemSelectedListener = this
+        val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(requireActivity(), android.R.layout.simple_spinner_item, ratingList)
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.BookAddRating.adapter = ad
 
         if (arguments != null){
             editBook = arguments?.getSerializable("book") as Book
@@ -142,7 +150,8 @@ class BookAddFragment : Fragment() {
         binding.BookAddTitle.setText(editBook.title)
         binding.BookAddAuthor.setText(editBook.author)
         binding.BookAddGenre.setText(editBook.genre)
-        binding.BookAddRating.setText(editBook.rating.toString())
+
+        binding.BookAddRating.setSelection(editBook.rating!! - 1)
 
         val cDate = dateFormatter.format(Date(editBook.complete!!.toInstant().toEpochMilli()))
         completeDate = editBook.complete!!.toInstant().toEpochMilli()
@@ -159,7 +168,7 @@ class BookAddFragment : Fragment() {
 
         if (editing) imageName = binding.BookAddImageName.text.toString()
         if (image != Uri.EMPTY ) imageName = fileName
-        val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddRating.text.toString().toInt(), Date(completeDate), imageName)
+        val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddRating.selectedItemPosition + 1, Date(completeDate), imageName)
 
         //if editing, set over existing game
         if (editing){
@@ -207,20 +216,26 @@ class BookAddFragment : Fragment() {
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
-            if (binding.BookAddRating.text.toString().toInt() > 5 || binding.BookAddRating.text.toString().toInt() <= 0){
-                Toast.makeText(requireActivity(), "Rating must be a number between 1 and 5", Toast.LENGTH_LONG).show()
-            } else {
-                saveBook(view)
 
-            }
+            saveBook(view)
+
+
         } else {
             Toast.makeText(requireActivity(), "All fields must be filled out", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun checkBlank(): Boolean{
-        return (binding.BookAddTitle.text.isEmpty() || binding.BookAddAuthor.text.isEmpty() || binding.BookAddGenre.text.isEmpty() || binding.BookAddRating.text.isEmpty() || binding.BookAddCompDate.text.isEmpty())
+        return (binding.BookAddTitle.text.isEmpty() || binding.BookAddAuthor.text.isEmpty() || binding.BookAddGenre.text.isEmpty() || binding.BookAddRating.selectedItem == null || binding.BookAddCompDate.text.isEmpty())
 
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        Toast.makeText(requireActivity(), "Position is: $position", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 
 }

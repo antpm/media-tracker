@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -17,7 +17,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -79,7 +80,7 @@
                 android:text="@string/add_rating"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -89,7 +90,7 @@
                 android:text="@string/add_comp_date"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -99,7 +100,7 @@
                 android:text="@string/add_image"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
             <EditText
                 android:id="@+id/BookAddTitle"
@@ -130,45 +131,40 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline" />
 
             <EditText
-                android:id="@+id/BookAddRating"
-                android:layout_width="64dp"
-                android:layout_height="48dp"
-                android:ems="10"
-                android:inputType="number"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
-                app:layout_constraintStart_toStartOf="@+id/guideline" />
-
-            <EditText
                 android:id="@+id/BookAddCompDate"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:ems="10"
+                android:focusable="false"
                 android:inputType="date"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView11"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                android:focusable="false"/>
+                app:layout_constraintStart_toStartOf="@+id/guideline" />
 
             <Button
                 android:id="@+id/BookAddSaveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
                 android:text="@string/add_save_book"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/BookAddImageName" />
 
             <Button
                 android:id="@+id/BookAddCancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="32dp"
                 android:text="@string/add_cancel"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/BookAddImageName" />
 
             <Button
                 android:id="@+id/BookAddImageButton"
@@ -188,6 +184,33 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/BookAddImageButton" />
+
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/spinner_border"
+                android:orientation="horizontal"
+                app:layout_constraintBaseline_toBaselineOf="@id/textView9"
+                app:layout_constraintStart_toStartOf="@+id/guideline">
+
+                <Spinner
+                    android:id="@+id/BookAddRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:dropDownWidth="50dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+
+                    android:src="@drawable/down_arrow" />
+
+            </RelativeLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

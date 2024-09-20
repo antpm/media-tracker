@@ -67,7 +67,6 @@ class BookDetailsFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         book = arguments?.getSerializable("book") as Book
-        id = arguments?.getString("id") as String
 
         binding.BookDetailCloseButton.setOnClickListener {
             dialog!!.dismiss()

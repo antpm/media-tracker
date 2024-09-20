@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +34,7 @@ import java.time.ZonedDateTime
 import java.util.Date
 import java.util.Locale
 
-class GameAddFragment : Fragment() {
+class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentGameAddBinding? = null
     private val binding get() = _binding!!
@@ -49,6 +51,7 @@ class GameAddFragment : Fragment() {
     private var fileName:String = "noimage.jpg"
     private var image: Uri = Uri.EMPTY
     private var editing = false
+    private val ratingList: Array<Int> = arrayOf(1,2,3,4,5)
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
@@ -81,11 +84,18 @@ class GameAddFragment : Fragment() {
 
         auth = Firebase.auth
 
+        binding.GameAddRating.onItemSelectedListener = this
+        val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(requireActivity(), android.R.layout.simple_spinner_item, ratingList)
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.GameAddRating.adapter = ad
+
         if (arguments != null){
             editGame = arguments?.getSerializable("game") as Game
             editID = editGame.id.toString()
             enableEditing(editGame)
         }
+
+
 
         binding.GameAddCompDate.setOnClickListener {
             showDatePicker(binding.GameAddCompDate)
@@ -121,7 +131,8 @@ class GameAddFragment : Fragment() {
         binding.GameAddDev.setText(editGame.developer)
         binding.GameAddPlatform.setText(editGame.platform)
         binding.GameAddGenre.setText(editGame.genre)
-        binding.GameAddRating.setText(editGame.rating.toString())
+
+        binding.GameAddRating.setSelection(editGame.rating!! - 1)
 
         val cDate = dateFormatter.format(Date(editGame.complete!!.toInstant().toEpochMilli()))
         completeDate = editGame.complete!!.toInstant().toEpochMilli()
@@ -166,7 +177,7 @@ class GameAddFragment : Fragment() {
 
         if (editing) imageName = binding.GameAddImageName.text.toString()
         if (image != Uri.EMPTY ) imageName = fileName
-        val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.text.toString().toInt(), Date(completeDate), imageName)
+        val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.selectedItemPosition + 1, Date(completeDate), imageName)
 
         //if editing, set over existing game
         if (editing){
@@ -204,19 +215,24 @@ class GameAddFragment : Fragment() {
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
-            if (binding.GameAddRating.text.toString().toInt() > 5 || binding.GameAddRating.text.toString().toInt() <= 0){
-                Toast.makeText(requireActivity(), "Rating must be a number between 1 and 5", Toast.LENGTH_LONG).show()
-            } else {
-                saveGame(view)
+            
+            saveGame(view)
 
-            }
         } else {
             Toast.makeText(requireActivity(), "All fields must be filled out", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun checkBlank(): Boolean{
-        return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.text.isEmpty() || binding.GameAddCompDate.text.isEmpty())
+        return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.selectedItem == null || binding.GameAddCompDate.text.isEmpty())
 
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        Toast.makeText(requireActivity(), "Position is: $position", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 }
