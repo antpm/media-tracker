@@ -178,7 +178,7 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 
         //when in editing mode, imageName is set to old image name
-        if (editing) imageName = binding.GameAddImageName.text.toString()
+        if (editing) imageName = editGame.image.toString()
 
         //if the user has selected an image to upload, imageName gets set to the randomly generated file name
         if (image != Uri.EMPTY ) imageName = fileName

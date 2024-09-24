@@ -166,7 +166,7 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 
 
-        if (editing) imageName = binding.BookAddImageName.text.toString()
+        if (editing) imageName = editBook.image.toString()
         if (image != Uri.EMPTY ) imageName = fileName
         val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddRating.selectedItemPosition + 1, Date(completeDate), imageName)
 
