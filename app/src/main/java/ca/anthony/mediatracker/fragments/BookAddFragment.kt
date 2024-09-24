@@ -59,9 +59,10 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         if (it != null){
-            fileName = getFileNameFromUri(requireActivity(), it).toString()
+            fileName = getRandomString(30)
             image = it
-            binding.BookAddImageName.text = fileName
+            binding.BookAddImageName.visibility = View.VISIBLE
+            binding.BookAddImageCheck.visibility = View.VISIBLE
         }
 
     }
@@ -156,7 +157,6 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val cDate = dateFormatter.format(Date(editBook.complete!!.toInstant().toEpochMilli()))
         completeDate = editBook.complete!!.toInstant().toEpochMilli()
         binding.BookAddCompDate.setText(cDate)
-        binding.BookAddImageName.text = editBook.image
 
     }
 
@@ -176,7 +176,7 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 Toast.makeText(context, "Book Updated", Toast.LENGTH_LONG).show()
                 //check if the image has been updated, if so upload new image and delete old image
                 if (book.image != oldImage && image != Uri.EMPTY){
-                    val imageRef = storage.child(fileName)
+                    val imageRef = storage.child(imageName)
                     imageRef.child(oldImage).delete()
                     imageRef.putFile(image)
                 }
@@ -193,7 +193,7 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
             db.collection("users").document(auth.currentUser!!.uid).collection("books").add(book).addOnSuccessListener {
                 Toast.makeText(context, "Book Added", Toast.LENGTH_LONG).show()
                 if (image != Uri.EMPTY){
-                    val imageRef = storage.child(fileName)
+                    val imageRef = storage.child(imageName)
                     imageRef.putFile(image)
                 }
                 Navigation.findNavController(view).popBackStack()
@@ -211,6 +211,11 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
         cursor?.close()
         return fileName
+    }
+
+    private fun getRandomString(length: Int) : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return String(CharArray(length) { allowedChars.random() })
     }
 
     private fun validateInput(view: View){

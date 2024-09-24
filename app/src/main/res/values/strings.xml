@@ -59,6 +59,7 @@
     <string name="add_developer">Developer:</string>
     <string name="add_publisher">Publisher:</string>
     <string name="add_image">Image:</string>
+    <string name="add_image_selected">Image Selected</string>
     <string name="add_platform">Platform:</string>
     <string name="add_genre">Genre:</string>
     <string name="add_save_game">Save Game</string>

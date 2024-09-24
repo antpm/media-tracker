@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,9 +57,11 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         if (it != null){
-            fileName = getFileNameFromUri(requireActivity(), it).toString()
+
+            fileName = getRandomString(30)
             image = it
-            binding.GameAddImageName.text = fileName
+            binding.GameAddImageName.visibility = View.VISIBLE
+            binding.GameAddImageCheck.visibility = View.VISIBLE
         }
 
     }
@@ -137,7 +140,6 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val cDate = dateFormatter.format(Date(editGame.complete!!.toInstant().toEpochMilli()))
         completeDate = editGame.complete!!.toInstant().toEpochMilli()
         binding.GameAddCompDate.setText(cDate)
-        binding.GameAddImageName.text = editGame.image
 
     }
 
@@ -175,8 +177,12 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         var imageName = "noimage.jpg"
 
 
+        //when in editing mode, imageName is set to old image name
         if (editing) imageName = binding.GameAddImageName.text.toString()
+
+        //if the user has selected an image to upload, imageName gets set to the randomly generated file name
         if (image != Uri.EMPTY ) imageName = fileName
+
         val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.selectedItemPosition + 1, Date(completeDate), imageName)
 
         //if editing, set over existing game
@@ -185,7 +191,8 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 Toast.makeText(context, "Game Updated", Toast.LENGTH_LONG).show()
                 //check if the image has been updated, if so upload new image and delete old image
                 if (game.image != oldImage && image != Uri.EMPTY){
-                    val imageRef = storage.child(fileName)
+
+                    val imageRef = storage.child(imageName)
                     imageRef.child(oldImage).delete()
                     imageRef.putFile(image)
                 }
@@ -202,7 +209,7 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
             db.collection("users").document(auth.currentUser!!.uid).collection("games").add(game).addOnSuccessListener {
                 Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
                 if (image != Uri.EMPTY){
-                    val imageRef = storage.child(fileName)
+                    val imageRef = storage.child(imageName)
                     imageRef.putFile(image)
                 }
                 Navigation.findNavController(view).popBackStack()
@@ -210,6 +217,11 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 Toast.makeText(context, "Game Not Added", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun getRandomString(length: Int) : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return String(CharArray(length) { allowedChars.random() })
     }
 
     private fun validateInput(view: View){
