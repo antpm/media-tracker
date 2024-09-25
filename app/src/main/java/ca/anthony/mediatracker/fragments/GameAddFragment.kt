@@ -20,6 +20,7 @@ import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.databinding.FragmentGameAddBinding
 import ca.anthony.mediatracker.models.Game
+import ca.anthony.mediatracker.models.Utilities
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -47,6 +48,8 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var editID = ""
     private var oldImage = ""
 
+    private lateinit var util:Utilities
+
     //values
     private var completeDate:Long = 0
     private var fileName:String = "noimage.jpg"
@@ -58,10 +61,11 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         if (it != null){
 
-            fileName = getRandomString(30)
+            fileName = util.getRandomString(30)
             image = it
             binding.GameAddImageName.visibility = View.VISIBLE
             binding.GameAddImageCheck.visibility = View.VISIBLE
+            //binding.GameAddImageName.text = fileName
         }
 
     }
@@ -84,6 +88,8 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        util = Utilities(requireActivity())
 
         auth = Firebase.auth
 
@@ -163,7 +169,8 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    @SuppressLint("Range")
+    //this is no longer being used but keeping it here just in case
+    /*@SuppressLint("Range")
     private fun getFileNameFromUri(context: Context, uri: Uri): String? {
         val fileName: String?
         val cursor = context.contentResolver.query(uri, null, null, null, null)
@@ -171,7 +178,7 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
         cursor?.close()
         return fileName
-    }
+    } */
 
     private fun saveGame(view: View){
         var imageName = "noimage.jpg"
@@ -219,11 +226,6 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun getRandomString(length: Int) : String {
-        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-        return String(CharArray(length) { allowedChars.random() })
-    }
-
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
@@ -241,10 +243,12 @@ class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        Toast.makeText(requireActivity(), "Position is: $position", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireActivity(), "Position is: $position", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
+
     }
+
+
 }

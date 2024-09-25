@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/log_in">
+    app:startDestination="@id/home_fragment">
 
     <fragment
         android:id="@+id/home_fragment"
@@ -68,8 +68,9 @@
         <action
             android:id="@+id/action_log_in_to_home_fragment"
             app:destination="@id/home_fragment"
-            app:popUpTo="@+id/log_in"
-            app:popUpToInclusive="true"/>
+            app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true"
+            />
 
     </fragment>
     <fragment

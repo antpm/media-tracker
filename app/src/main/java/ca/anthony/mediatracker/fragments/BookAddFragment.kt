@@ -21,6 +21,7 @@ import ca.anthony.mediatracker.databinding.FragmentBookAddBinding
 import ca.anthony.mediatracker.databinding.FragmentGameAddBinding
 import ca.anthony.mediatracker.models.Book
 import ca.anthony.mediatracker.models.Game
+import ca.anthony.mediatracker.models.Utilities
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -49,6 +50,8 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var editID = ""
     private var oldImage = ""
 
+    private lateinit var util: Utilities
+
     //values
     private var completeDate:Long = 0
     private var fileName: String = ""
@@ -59,7 +62,7 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         if (it != null){
-            fileName = getRandomString(30)
+            fileName = util.getRandomString(30)
             image = it
             binding.BookAddImageName.visibility = View.VISIBLE
             binding.BookAddImageCheck.visibility = View.VISIBLE
@@ -84,6 +87,8 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        util = Utilities(requireActivity())
 
         auth = Firebase.auth
 
@@ -161,12 +166,11 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun saveBook(view: View){
-        //TODO:this should be replaced with the filename variable
         var imageName = "noimage.jpg"
 
 
-
         if (editing) imageName = editBook.image.toString()
+
         if (image != Uri.EMPTY ) imageName = fileName
         val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddRating.selectedItemPosition + 1, Date(completeDate), imageName)
 
@@ -203,21 +207,6 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    @SuppressLint("Range")
-    private fun getFileNameFromUri(context: Context, uri: Uri): String? {
-        val fileName: String?
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
-        cursor?.moveToFirst()
-        fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-        cursor?.close()
-        return fileName
-    }
-
-    private fun getRandomString(length: Int) : String {
-        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-        return String(CharArray(length) { allowedChars.random() })
-    }
-
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
@@ -236,11 +225,11 @@ class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        Toast.makeText(requireActivity(), "Position is: $position", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireActivity(), "Position is: $position", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
+
     }
 
 }

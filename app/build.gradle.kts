@@ -48,15 +48,15 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.1")
+    implementation("com.google.gms:google-services:4.4.2")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation ("com.google.android.material:material:1.4.0")
+    implementation ("com.google.android.material:material:1.12.0")
 
 
     //glide, for loading images from firebase storage
@@ -64,7 +64,7 @@ dependencies {
 
 
     //firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-auth")

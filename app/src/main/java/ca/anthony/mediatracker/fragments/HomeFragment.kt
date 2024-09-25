@@ -71,40 +71,47 @@ class HomeFragment : Fragment() {
         auth = Firebase.auth
         val user = auth.currentUser
 
-        binding.HomeWelcome.text = requireActivity().getString(R.string.home_welcome, user!!.displayName)
+        if (user == null){
+            navBar.visibility = View.GONE
+            Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
+        } else {
+            binding.HomeWelcome.text = requireActivity().getString(R.string.home_welcome, user!!.displayName)
 
-        binding.HomeToolbar.inflateMenu(R.menu.menu_home)
-        binding.HomeToolbar.setOnMenuItemClickListener {
-            when (it.itemId){
-                R.id.log_out -> {
-                    val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
-                    builder
-                        .setTitle("Do you want to log out?")
-                        .setPositiveButton("Confirm"){dialog, which ->
-                            auth.signOut()
-                            navBar.visibility = View.GONE
-                            Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
-                            Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
-                        }
-                        .setNegativeButton("Cancel"){ _, _ -> }
-                    val dialog: AlertDialog = builder.create()
-                    dialog.show()
-                    true
-                }
-                R.id.account ->{
-                    navBar.visibility = View.GONE
-                    Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_account_fragment)
-                    true
-                }
-                else -> {
-                    super.onOptionsItemSelected(it)
+            binding.HomeToolbar.inflateMenu(R.menu.menu_home)
+            binding.HomeToolbar.setOnMenuItemClickListener {
+                when (it.itemId){
+                    R.id.log_out -> {
+                        val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
+                        builder
+                            .setTitle("Do you want to log out?")
+                            .setPositiveButton("Confirm"){dialog, which ->
+                                auth.signOut()
+                                navBar.visibility = View.GONE
+                                Toast.makeText(requireActivity(), "Logged Out", Toast.LENGTH_SHORT).show()
+                                Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_log_in)
+                            }
+                            .setNegativeButton("Cancel"){ _, _ -> }
+                        val dialog: AlertDialog = builder.create()
+                        dialog.show()
+                        true
+                    }
+                    R.id.account ->{
+                        navBar.visibility = View.GONE
+                        Navigation.findNavController(view).navigate(R.id.action_home_fragment_to_account_fragment)
+                        true
+                    }
+                    else -> {
+                        super.onOptionsItemSelected(it)
+                    }
                 }
             }
+
+
+            getLatestGame()
+            getLatestBook()
         }
 
 
-        getLatestGame()
-        getLatestBook()
 
     }
 

@@ -20,13 +20,13 @@
 
     <ImageView
         android:id="@+id/BookDetailImage"
-        android:layout_width="189dp"
-        android:layout_height="264dp"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@drawable/loading" />
 
     <ImageView
         android:id="@+id/BookDetailRating"
