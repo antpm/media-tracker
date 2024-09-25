@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
@@ -17,16 +20,20 @@ import com.google.firebase.storage.storage
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class GameDetailsFragment : Fragment() {
+class GameDetailsFragment : DialogFragment() {
 
     private var _binding: FragmentGameDetailsBinding? = null
     private val binding get() = _binding!!
 
     private var game = Game()
     private var id = ""
-    private lateinit var navBar: BottomNavigationView
 
     private val storage = Firebase.storage.reference.child("images/games")
+
+    override fun onStart() {
+        super.onStart()
+        dialog!!.window!!.setLayout(MATCH_PARENT, WRAP_CONTENT)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,18 +63,10 @@ class GameDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         game = arguments?.getSerializable("game") as Game
-        id = arguments?.getString("id") as String
+
         binding.GameDetailCloseButton.setOnClickListener {
 
-            Navigation.findNavController(view).popBackStack()
-        }
-
-
-        binding.GameDetailEditButton.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putSerializable("game", game)
-            bundle.putString("id", id)
-            Navigation.findNavController(it).navigate(R.id.action_game_detail_fragment_to_game_add_fragment, bundle)
+            dialog!!.dismiss()
         }
 
         setDetails()
@@ -95,14 +94,10 @@ class GameDetailsFragment : Fragment() {
         //set release date and complete date
         val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
-        binding.GameDetailReleaseDate.text = requireActivity().getString(R.string.release_date, format.format(game.release!!))
         binding.GameDetailCompleteDate.text = requireActivity().getString(R.string.complete_date, format.format(game.complete!!))
 
         //set dev
         binding.GameDetailDeveloper.text = requireActivity().getString(R.string.developer, game.developer)
-
-        //set pub
-        binding.GameDetailPublisher.text =requireActivity().getString(R.string.publisher, game.publisher)
 
         //set platform
         binding.GameDetailPlatform.text = requireActivity().getString(R.string.platform, game.platform)

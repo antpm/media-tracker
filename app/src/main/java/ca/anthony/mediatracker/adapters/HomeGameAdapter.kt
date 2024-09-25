@@ -39,18 +39,23 @@ class HomeGameAdapter(private val game: Game, private val image: Uri, private va
 
         //set rest of fields
         holder.gameTitle.text = game.title
-        val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-        holder.gameComplete.text = context.getString(R.string.complete_date, format.format(game.complete!!))
+        holder.gameDev.text = game.developer
+        holder.gamePlat.text = game.platform
+        holder.gameGenre.text = game.genre
 
-        holder.gameRating.text = context.getString(R.string.rating, game.rating)
+        val format = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+        //holder.gameComplete.text = context.getString(R.string.complete_date, format.format(game.complete!!))
+        holder.gameComplete.text = format.format(game.complete!!)
 
-        holder.gameDetailsButton.setOnClickListener{
-            val bundle = Bundle()
-            bundle.putSerializable("game", game)
-            bundle.putString("id", id)
-            Navigation.findNavController(holder.itemView).navigate(R.id.action_home_fragment_to_game_detail_fragment, bundle)
-
+        when (game.rating) {
+            1-> holder.gameRating.setImageResource(R.drawable.star1)
+            2-> holder.gameRating.setImageResource(R.drawable.star2)
+            3-> holder.gameRating.setImageResource(R.drawable.star3)
+            4-> holder.gameRating.setImageResource(R.drawable.star4)
+            5-> holder.gameRating.setImageResource(R.drawable.star5)
         }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -60,8 +65,10 @@ class HomeGameAdapter(private val game: Game, private val image: Uri, private va
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         val gameImage: ImageView = itemView.findViewById(R.id.HomeGameImage)
         val gameTitle: TextView = itemView.findViewById(R.id.HomeGameTitle)
-        val gameRating: TextView = itemView.findViewById(R.id.HomeGameRating)
+        val gameDev: TextView = itemView.findViewById(R.id.HomeGameDeveloper)
+        val gamePlat: TextView = itemView.findViewById(R.id.HomeGamePlatform)
+        val gameGenre: TextView = itemView.findViewById(R.id.HomeGameGenre)
+        val gameRating: ImageView = itemView.findViewById(R.id.HomeGameRating)
         val gameComplete: TextView = itemView.findViewById(R.id.HomeGameCompleteDate)
-        val gameDetailsButton: Button = itemView.findViewById(R.id.HomeGameDetailsButton)
     }
 }

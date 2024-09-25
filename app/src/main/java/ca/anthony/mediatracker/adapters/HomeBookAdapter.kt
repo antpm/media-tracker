@@ -25,27 +25,27 @@ class HomeBookAdapter(private val book: Book, private val image: Uri, private va
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeBookAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recycler_home_latest_book, parent, false)
-        return HomeBookAdapter.ViewHolder(itemView)
+        return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: HomeBookAdapter.ViewHolder, position: Int) {
         holder.bookTitle.text = book.title
         holder.bookAuthor.text = book.author
+        holder.bookGenre.text = book.genre
 
         Glide.with(context).load(image).into(holder.bookImage)
 
-        val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-        holder.bookComplete.text = context.getString(R.string.complete_date, format.format(book.complete!!))
+        val format = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+        holder.bookComplete.text = format.format(book.complete)
 
-        holder.bookRating.text = context.getString(R.string.rating, book.rating)
-
-        holder.bookDetailsButton.setOnClickListener{
-            val bundle = Bundle()
-            bundle.putSerializable("book", book)
-            bundle.putString("id", id)
-            Navigation.findNavController(holder.itemView).navigate(R.id.action_home_fragment_to_book_details_fragment, bundle)
+        when (book.rating) {
+            1-> holder.bookRating.setImageResource(R.drawable.star1)
+            2-> holder.bookRating.setImageResource(R.drawable.star2)
+            3-> holder.bookRating.setImageResource(R.drawable.star3)
+            4-> holder.bookRating.setImageResource(R.drawable.star4)
+            5-> holder.bookRating.setImageResource(R.drawable.star5)
         }
     }
 
@@ -54,11 +54,13 @@ class HomeBookAdapter(private val book: Book, private val image: Uri, private va
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
         val bookImage: ImageView = itemView.findViewById(R.id.HomeBookImage)
         val bookTitle: TextView = itemView.findViewById(R.id.HomeBookTitle)
         val bookAuthor: TextView = itemView.findViewById(R.id.HomeBookAuthor)
-        val bookRating: TextView = itemView.findViewById(R.id.HomeBookRating)
+        val bookGenre: TextView = itemView.findViewById(R.id.HomeBookGenre)
+        val bookRating: ImageView = itemView.findViewById(R.id.HomeBookRating)
         val bookComplete: TextView = itemView.findViewById(R.id.HomeBookCompleteDate)
-        val bookDetailsButton: Button = itemView.findViewById(R.id.HomeBookDetailsButton)
     }
+
 }

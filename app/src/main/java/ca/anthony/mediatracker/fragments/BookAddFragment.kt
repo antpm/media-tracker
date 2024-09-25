@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +21,7 @@ import ca.anthony.mediatracker.databinding.FragmentBookAddBinding
 import ca.anthony.mediatracker.databinding.FragmentGameAddBinding
 import ca.anthony.mediatracker.models.Book
 import ca.anthony.mediatracker.models.Game
+import ca.anthony.mediatracker.models.Utilities
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -35,7 +38,7 @@ import java.util.Date
 import java.util.Locale
 
 
-class BookAddFragment : Fragment() {
+class BookAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentBookAddBinding? = null
     private val binding get() = _binding!!
@@ -47,19 +50,22 @@ class BookAddFragment : Fragment() {
     private var editID = ""
     private var oldImage = ""
 
+    private lateinit var util: Utilities
+
     //values
-    private var releaseDate: Long = 0
     private var completeDate:Long = 0
     private var fileName: String = ""
     private var image: Uri = Uri.EMPTY
     private var editing = false
+    private val ratingList: Array<Int> = arrayOf(1,2,3,4,5)
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         if (it != null){
-            fileName = getFileNameFromUri(requireActivity(), it).toString()
+            fileName = util.getRandomString(30)
             image = it
-            binding.BookAddImageName.text = fileName
+            binding.BookAddImageName.visibility = View.VISIBLE
+            binding.BookAddImageCheck.visibility = View.VISIBLE
         }
 
     }
@@ -82,16 +88,19 @@ class BookAddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        util = Utilities(requireActivity())
+
         auth = Firebase.auth
+
+        binding.BookAddRating.onItemSelectedListener = this
+        val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(requireActivity(), android.R.layout.simple_spinner_item, ratingList)
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.BookAddRating.adapter = ad
 
         if (arguments != null){
             editBook = arguments?.getSerializable("book") as Book
-            editID = arguments?.getString("id") as String
+            editID = editBook.id.toString()
             enableEditing(editBook)
-        }
-
-        binding.BookAddReleaseDate.setOnClickListener {
-            showDatePicker(binding.BookAddReleaseDate)
         }
 
         binding.BookAddCompDate.setOnClickListener {
@@ -124,14 +133,10 @@ class BookAddFragment : Fragment() {
             val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
             val date = dateFormatter.format(Date(myTimeZoneDate.toInstant().toEpochMilli()))
 
-            //set values based on textfield that was clicked
-            if (textField == binding.BookAddReleaseDate){
-                releaseDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.BookAddReleaseDate.setText(date)
-            } else if (textField == binding.BookAddCompDate){
-                completeDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.BookAddCompDate.setText(date)
-            }
+            //set values
+            completeDate = myTimeZoneDate.toInstant().toEpochMilli()
+            binding.BookAddCompDate.setText(date)
+
         }
     }
 
@@ -150,28 +155,24 @@ class BookAddFragment : Fragment() {
         //set values in fields
         binding.BookAddTitle.setText(editBook.title)
         binding.BookAddAuthor.setText(editBook.author)
-        binding.BookAddPublisher.setText(editBook.publisher)
         binding.BookAddGenre.setText(editBook.genre)
-        binding.BookAddRating.setText(editBook.rating.toString())
-        val rDate = dateFormatter.format(Date(editBook.release!!.toInstant().toEpochMilli()))
-        releaseDate = editBook.release!!.toInstant().toEpochMilli()
-        binding.BookAddReleaseDate.setText(rDate)
+
+        binding.BookAddRating.setSelection(editBook.rating!! - 1)
+
         val cDate = dateFormatter.format(Date(editBook.complete!!.toInstant().toEpochMilli()))
         completeDate = editBook.complete!!.toInstant().toEpochMilli()
         binding.BookAddCompDate.setText(cDate)
-        binding.BookAddImageName.text = editBook.image
 
     }
 
     private fun saveBook(view: View){
-        //TODO:this should be replaced with the filename variable
         var imageName = "noimage.jpg"
 
 
+        if (editing) imageName = editBook.image.toString()
 
-        if (editing) imageName = binding.BookAddImageName.text.toString()
         if (image != Uri.EMPTY ) imageName = fileName
-        val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddPublisher.text.toString(), binding.BookAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
+        val book = Book(binding.BookAddTitle.text.toString(), binding.BookAddAuthor.text.toString(), binding.BookAddGenre.text.toString(), binding.BookAddRating.selectedItemPosition + 1, Date(completeDate), imageName)
 
         //if editing, set over existing game
         if (editing){
@@ -179,7 +180,7 @@ class BookAddFragment : Fragment() {
                 Toast.makeText(context, "Book Updated", Toast.LENGTH_LONG).show()
                 //check if the image has been updated, if so upload new image and delete old image
                 if (book.image != oldImage && image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
+                    val imageRef = storage.child(imageName)
                     imageRef.child(oldImage).delete()
                     imageRef.putFile(image)
                 }
@@ -196,7 +197,7 @@ class BookAddFragment : Fragment() {
             db.collection("users").document(auth.currentUser!!.uid).collection("books").add(book).addOnSuccessListener {
                 Toast.makeText(context, "Book Added", Toast.LENGTH_LONG).show()
                 if (image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
+                    val imageRef = storage.child(imageName)
                     imageRef.putFile(image)
                 }
                 Navigation.findNavController(view).popBackStack()
@@ -206,32 +207,28 @@ class BookAddFragment : Fragment() {
         }
     }
 
-    @SuppressLint("Range")
-    private fun getFileNameFromUri(context: Context, uri: Uri): String? {
-        val fileName: String?
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
-        cursor?.moveToFirst()
-        fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-        cursor?.close()
-        return fileName
-    }
-
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
-            if (binding.BookAddRating.text.toString().toInt() > 5 || binding.BookAddRating.text.toString().toInt() <= 0){
-                Toast.makeText(requireActivity(), "Rating must be a number between 1 and 5", Toast.LENGTH_LONG).show()
-            } else {
-                saveBook(view)
 
-            }
+            saveBook(view)
+
+
         } else {
             Toast.makeText(requireActivity(), "All fields must be filled out", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun checkBlank(): Boolean{
-        return (binding.BookAddTitle.text.isEmpty() || binding.BookAddAuthor.text.isEmpty() || binding.BookAddPublisher.text.isEmpty() || binding.BookAddGenre.text.isEmpty() || binding.BookAddRating.text.isEmpty() || binding.BookAddReleaseDate.text.isEmpty() || binding.BookAddCompDate.text.isEmpty())
+        return (binding.BookAddTitle.text.isEmpty() || binding.BookAddAuthor.text.isEmpty() || binding.BookAddGenre.text.isEmpty() || binding.BookAddRating.selectedItem == null || binding.BookAddCompDate.text.isEmpty())
+
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        //Toast.makeText(requireActivity(), "Position is: $position", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
 
     }
 

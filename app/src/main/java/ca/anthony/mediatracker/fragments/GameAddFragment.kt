@@ -5,10 +5,13 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,6 +20,7 @@ import androidx.navigation.Navigation
 import ca.anthony.mediatracker.R
 import ca.anthony.mediatracker.databinding.FragmentGameAddBinding
 import ca.anthony.mediatracker.models.Game
+import ca.anthony.mediatracker.models.Utilities
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -32,7 +36,7 @@ import java.time.ZonedDateTime
 import java.util.Date
 import java.util.Locale
 
-class GameAddFragment : Fragment() {
+class GameAddFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentGameAddBinding? = null
     private val binding get() = _binding!!
@@ -44,19 +48,24 @@ class GameAddFragment : Fragment() {
     private var editID = ""
     private var oldImage = ""
 
+    private lateinit var util:Utilities
+
     //values
-    private var releaseDate: Long = 0
     private var completeDate:Long = 0
     private var fileName:String = "noimage.jpg"
     private var image: Uri = Uri.EMPTY
     private var editing = false
+    private val ratingList: Array<Int> = arrayOf(1,2,3,4,5)
 
     //launcher for selecting an image
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         if (it != null){
-            fileName = getFileNameFromUri(requireActivity(), it).toString()
+
+            fileName = util.getRandomString(30)
             image = it
-            binding.GameAddImageName.text = fileName
+            binding.GameAddImageName.visibility = View.VISIBLE
+            binding.GameAddImageCheck.visibility = View.VISIBLE
+            //binding.GameAddImageName.text = fileName
         }
 
     }
@@ -80,17 +89,22 @@ class GameAddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        util = Utilities(requireActivity())
+
         auth = Firebase.auth
+
+        binding.GameAddRating.onItemSelectedListener = this
+        val ad: ArrayAdapter<*> = ArrayAdapter<Any?>(requireActivity(), android.R.layout.simple_spinner_item, ratingList)
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.GameAddRating.adapter = ad
 
         if (arguments != null){
             editGame = arguments?.getSerializable("game") as Game
-            editID = arguments?.getString("id") as String
+            editID = editGame.id.toString()
             enableEditing(editGame)
         }
 
-        binding.GameAddReleaseDate.setOnClickListener {
-            showDatePicker(binding.GameAddReleaseDate)
-        }
+
 
         binding.GameAddCompDate.setOnClickListener {
             showDatePicker(binding.GameAddCompDate)
@@ -124,17 +138,14 @@ class GameAddFragment : Fragment() {
         //set values in fields
         binding.GameAddTitle.setText(editGame.title)
         binding.GameAddDev.setText(editGame.developer)
-        binding.GameAddPublisher.setText(editGame.publisher)
         binding.GameAddPlatform.setText(editGame.platform)
         binding.GameAddGenre.setText(editGame.genre)
-        binding.GameAddRating.setText(editGame.rating.toString())
-        val rDate = dateFormatter.format(Date(editGame.release!!.toInstant().toEpochMilli()))
-        releaseDate = editGame.release!!.toInstant().toEpochMilli()
-        binding.GameAddReleaseDate.setText(rDate)
+
+        binding.GameAddRating.setSelection(editGame.rating!! - 1)
+
         val cDate = dateFormatter.format(Date(editGame.complete!!.toInstant().toEpochMilli()))
         completeDate = editGame.complete!!.toInstant().toEpochMilli()
         binding.GameAddCompDate.setText(cDate)
-        binding.GameAddImageName.text = editGame.image
 
     }
 
@@ -151,18 +162,15 @@ class GameAddFragment : Fragment() {
             val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.US)
             val date = dateFormatter.format(Date(myTimeZoneDate.toInstant().toEpochMilli()))
 
-            //set values based on textfield that was clicked
-            if (textField == binding.GameAddReleaseDate){
-                releaseDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.GameAddReleaseDate.setText(date)
-            } else if (textField == binding.GameAddCompDate){
-                completeDate = myTimeZoneDate.toInstant().toEpochMilli()
-                binding.GameAddCompDate.setText(date)
-            }
+            //set values
+            completeDate = myTimeZoneDate.toInstant().toEpochMilli()
+            binding.GameAddCompDate.setText(date)
+
         }
     }
 
-    @SuppressLint("Range")
+    //this is no longer being used but keeping it here just in case
+    /*@SuppressLint("Range")
     private fun getFileNameFromUri(context: Context, uri: Uri): String? {
         val fileName: String?
         val cursor = context.contentResolver.query(uri, null, null, null, null)
@@ -170,16 +178,19 @@ class GameAddFragment : Fragment() {
         fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
         cursor?.close()
         return fileName
-    }
+    } */
 
     private fun saveGame(view: View){
-        //TODO:this should be replaced with the filename variable
         var imageName = "noimage.jpg"
 
 
-        if (editing) imageName = binding.GameAddImageName.text.toString()
+        //when in editing mode, imageName is set to old image name
+        if (editing) imageName = editGame.image.toString()
+
+        //if the user has selected an image to upload, imageName gets set to the randomly generated file name
         if (image != Uri.EMPTY ) imageName = fileName
-        val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(), binding.GameAddPublisher.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.text.toString().toInt(), Date(releaseDate), Date(completeDate), imageName)
+
+        val game = Game(binding.GameAddTitle.text.toString(), binding.GameAddDev.text.toString(),binding.GameAddPlatform.text.toString(), binding.GameAddGenre.text.toString(), binding.GameAddRating.selectedItemPosition + 1, Date(completeDate), imageName)
 
         //if editing, set over existing game
         if (editing){
@@ -187,7 +198,8 @@ class GameAddFragment : Fragment() {
                 Toast.makeText(context, "Game Updated", Toast.LENGTH_LONG).show()
                 //check if the image has been updated, if so upload new image and delete old image
                 if (game.image != oldImage && image != Uri.EMPTY){
-                    val imageRef = storage.child("${image.lastPathSegment}")
+
+                    val imageRef = storage.child(imageName)
                     imageRef.child(oldImage).delete()
                     imageRef.putFile(image)
                 }
@@ -204,7 +216,7 @@ class GameAddFragment : Fragment() {
             db.collection("users").document(auth.currentUser!!.uid).collection("games").add(game).addOnSuccessListener {
                 Toast.makeText(context, "Game Added", Toast.LENGTH_LONG).show()
                 if (image != Uri.EMPTY){
-                    val imageRef = storage.child(fileName)
+                    val imageRef = storage.child(imageName)
                     imageRef.putFile(image)
                 }
                 Navigation.findNavController(view).popBackStack()
@@ -217,19 +229,26 @@ class GameAddFragment : Fragment() {
     private fun validateInput(view: View){
         //maybe add more validation checking later
         if (!checkBlank()){
-            if (binding.GameAddRating.text.toString().toInt() > 5 || binding.GameAddRating.text.toString().toInt() <= 0){
-                Toast.makeText(requireActivity(), "Rating must be a number between 1 and 5", Toast.LENGTH_LONG).show()
-            } else {
-                saveGame(view)
+            
+            saveGame(view)
 
-            }
         } else {
             Toast.makeText(requireActivity(), "All fields must be filled out", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun checkBlank(): Boolean{
-        return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPublisher.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.text.isEmpty() || binding.GameAddReleaseDate.text.isEmpty() || binding.GameAddCompDate.text.isEmpty())
+        return (binding.GameAddTitle.text.isEmpty() || binding.GameAddDev.text.isEmpty() || binding.GameAddPlatform.text.isEmpty() || binding.GameAddGenre.text.isEmpty() || binding.GameAddRating.selectedItem == null || binding.GameAddCompDate.text.isEmpty())
 
     }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        //Toast.makeText(requireActivity(), "Position is: $position", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+    }
+
+
 }

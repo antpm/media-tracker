@@ -31,11 +31,12 @@
     <string name="sort_options">Sorting Options</string>
     <string name="sort">Sort By:</string>
     <string name="sort_release">Release Date</string>
-    <string name="sort_complete">Completion Date</string>
+    <string name="sort_complete">Completion</string>
     <string name="sort_rating">Rating</string>
     <string name="complete_date">Completion Date: %1$s</string>
     <string name="rating">Rating: %1$d/5</string>
     <string name="platform">Platform: %1$s</string>
+    <string name="details_button">View</string>
     <string name="game_details_button">View Game</string>
     <string name="book_details_button">View Book</string>
     <string name="genre">Genre: %1$s</string>
@@ -58,6 +59,7 @@
     <string name="add_developer">Developer:</string>
     <string name="add_publisher">Publisher:</string>
     <string name="add_image">Image:</string>
+    <string name="add_image_selected">Image Selected</string>
     <string name="add_platform">Platform:</string>
     <string name="add_genre">Genre:</string>
     <string name="add_save_game">Save Game</string>
